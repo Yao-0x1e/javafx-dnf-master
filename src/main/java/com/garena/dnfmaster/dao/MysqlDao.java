@@ -1,32 +1,19 @@
 package com.garena.dnfmaster.dao;
 
 import com.garena.dnfmaster.pojo.Charac;
-import org.apache.commons.dbcp2.BasicDataSource;
 import org.springframework.jdbc.core.JdbcTemplate;
 
-import java.sql.SQLException;
+import javax.sql.DataSource;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
 @SuppressWarnings("SqlNoDataSourceInspection")
 public class MysqlDao {
-    private final BasicDataSource dataSource = new BasicDataSource();
     private final JdbcTemplate jdbcTemplate;
 
-    public MysqlDao(String host, int port, String username, String password) {
-        String url = String.format("dao:mysql://%s:%d?characterEncoding=UTF-8&sslMode=PREFERRED", host, port);
-        this.dataSource.setDriverClassName("com.mysql.jdbc.Driver");
-        this.dataSource.setUrl(url);
-        this.dataSource.setUsername(username);
-        this.dataSource.setPassword(password);
-        this.dataSource.setMaxConnLifetimeMillis(1800000L);
-        this.dataSource.setMaxWaitMillis(1000L);
-        this.jdbcTemplate = new JdbcTemplate(this.dataSource);
-    }
-
-    public void close() throws SQLException {
-        this.dataSource.close();
+    public MysqlDao(DataSource dataSource) {
+        this.jdbcTemplate = new JdbcTemplate(dataSource);
     }
 
     public void setPvpWin(int characNo, int val) throws Exception {
@@ -179,7 +166,7 @@ public class MysqlDao {
         this.jdbcTemplate.update("insert into taiwan_cain_2nd.creature_items(charac_no,slot,it_id,reg_date,stomach,creature_type) values (?,?,?,NOW(),100,?);", characNo, slot, itemId, creatureType);
     }
 
-    public void emptyQuests(int characNo, boolean all) {
+    public void clearQuests(int characNo, boolean all) {
         if (!all) {
             this.jdbcTemplate.update("update taiwan_cain.new_charac_quest set play_1_trigger=0,play_2_trigger=0,play_3_trigger=0,play_4_trigger=0,play_5_trigger=0,play_6_trigger=0,play_7_trigger=0,play_8_trigger=0,play_9_trigger=0,play_10_trigger=0,play_11_trigger=0,play_12_trigger=0,play_13_trigger=0,play_14_trigger=0,play_15_trigger=0,play_16_trigger=0,play_17_trigger=0,play_18_trigger=0,play_19_trigger=0,play_20_trigger=0 where charac_no=?", characNo);
         } else {

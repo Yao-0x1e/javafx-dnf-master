@@ -39,6 +39,7 @@ public class SecurityUtils {
     }
 
     public static String getToken(int uid) throws Exception {
+        // 启动客户端的命令为 DNF.exe Token
         RSAPrivateKey privateKey = getPrivateKey();
         String s3 = "010101010101010101010101010101010101010101010101010101010101010155914510010403030101";
         String s2 = String.format("%08X", uid);
