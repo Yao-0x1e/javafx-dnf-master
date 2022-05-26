@@ -14,20 +14,14 @@
     <name>dnf-master</name>
     <description>Demo project for Spring Boot</description>
     <properties>
-        <java.version>11</java.version>
+        <java.version>1.8</java.version>
     </properties>
     <dependencies>
-        <!-- https://mvnrepository.com/artifact/net.synedra/validatorfx -->
-        <dependency>
-            <groupId>net.synedra</groupId>
-            <artifactId>validatorfx</artifactId>
-            <version>0.3.1</version>
-        </dependency>
-
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter</artifactId>
         </dependency>
+
         <!-- https://mvnrepository.com/artifact/org.openjfx/javafx-controls -->
         <dependency>
             <groupId>org.openjfx</groupId>
@@ -63,18 +57,11 @@
             <version>19-ea+7</version>
         </dependency>
 
-        <!-- https://mvnrepository.com/artifact/org.openjfx/javafx-web -->
+        <!-- https://mvnrepository.com/artifact/fr.brouillard.oss/cssfx -->
         <dependency>
-            <groupId>org.openjfx</groupId>
-            <artifactId>javafx-web</artifactId>
-            <version>19-ea+7</version>
-        </dependency>
-
-        <!-- https://mvnrepository.com/artifact/org.openjfx/javafx-media -->
-        <dependency>
-            <groupId>org.openjfx</groupId>
-            <artifactId>javafx-media</artifactId>
-            <version>19-ea+7</version>
+            <groupId>fr.brouillard.oss</groupId>
+            <artifactId>cssfx</artifactId>
+            <version>11.5.1</version>
         </dependency>
 
         <!-- https://mvnrepository.com/artifact/io.github.palexdev/materialfx -->
@@ -124,41 +111,6 @@
             <groupId>commons-io</groupId>
             <artifactId>commons-io</artifactId>
             <version>2.6</version>
-        </dependency>
-
-        <!-- https://mvnrepository.com/artifact/fr.brouillard.oss/cssfx -->
-        <dependency>
-            <groupId>fr.brouillard.oss</groupId>
-            <artifactId>cssfx</artifactId>
-            <version>11.5.1</version>
-        </dependency>
-
-        <!-- https://mvnrepository.com/artifact/io.github.palexdev/virtualizedfx -->
-        <dependency>
-            <groupId>io.github.palexdev</groupId>
-            <artifactId>virtualizedfx</artifactId>
-            <version>11.2.6</version>
-        </dependency>
-
-        <!-- https://mvnrepository.com/artifact/org.kordamp.ikonli/ikonli-core -->
-        <dependency>
-            <groupId>org.kordamp.ikonli</groupId>
-            <artifactId>ikonli-core</artifactId>
-            <version>12.3.1</version>
-        </dependency>
-
-        <!-- https://mvnrepository.com/artifact/org.kordamp.ikonli/ikonli-javafx -->
-        <dependency>
-            <groupId>org.kordamp.ikonli</groupId>
-            <artifactId>ikonli-javafx</artifactId>
-            <version>12.3.1</version>
-        </dependency>
-
-        <!-- https://mvnrepository.com/artifact/org.kordamp.ikonli/ikonli-fontawesome5-pack -->
-        <dependency>
-            <groupId>org.kordamp.ikonli</groupId>
-            <artifactId>ikonli-fontawesome5-pack</artifactId>
-            <version>12.3.1</version>
         </dependency>
 
         <dependency>

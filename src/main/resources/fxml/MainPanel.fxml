@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import io.github.palexdev.materialfx.controls.MFXScrollPane?>
+<?import io.github.palexdev.materialfx.font.MFXFontIcon?>
+<?import javafx.geometry.*?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.layout.*?>
+<AnchorPane xmlns="http://javafx.com/javafx"
+            xmlns:fx="http://javafx.com/fxml"
+            fx:id="rootPane"
+            fx:controller="com.garena.dnfmaster.controller.MainPanelController"
+            prefHeight="640.0"
+            prefWidth="960.0"
+            styleClass="rootPane"
+            stylesheets="@../css/MainPanel.css">
+
+    <HBox fx:id="windowHeader"
+          alignment="CENTER_RIGHT"
+          prefHeight="40.0"
+          prefWidth="960.0"
+          spacing="10.0"
+          AnchorPane.leftAnchor="0.0"
+          AnchorPane.rightAnchor="0.0"
+          AnchorPane.topAnchor="0.0">
+        <padding>
+            <Insets right="10.0"/>
+        </padding>
+        <MFXFontIcon fx:id="minimizeIcon"
+                     description="mfx-circle"
+                     size="18.0"
+                     styleClass="minimize-icon"/>
+        <MFXFontIcon fx:id="closeIcon"
+                     description="mfx-circle"
+                     size="18.0"
+                     styleClass="close-icon"/>
+    </HBox>
+
+    <VBox prefWidth="220.0"
+          styleClass="sidebar"
+          AnchorPane.bottomAnchor="0.0"
+          AnchorPane.leftAnchor="0.0"
+          AnchorPane.topAnchor="0.0">
+        <padding>
+            <Insets bottom="10.0" left="20.0" top="20.0"/>
+        </padding>
+        <Label graphicTextGap="15.0"
+               styleClass="header"
+               text="DNF Master">
+            <graphic>
+                <MFXFontIcon description="mfx-sliders" size="30.0"/>
+            </graphic>
+        </Label>
+        <MFXScrollPane fx:id="scrollPane"
+                       fitToWidth="true"
+                       hbarPolicy="NEVER"
+                       VBox.vgrow="ALWAYS">
+            <VBox.margin>
+                <Insets bottom="10.0" top="30.0"/>
+            </VBox.margin>
+            <padding>
+                <Insets right="20.0"/>
+            </padding>
+            <VBox fx:id="navBar"
+                  maxHeight="Infinity"
+                  maxWidth="Infinity"
+                  spacing="5.0"
+                  styleClass="navbar"/>
+        </MFXScrollPane>
+    </VBox>
+
+    <StackPane fx:id="contentPane"
+               prefHeight="590.0"
+               prefWidth="740.0"
+               AnchorPane.bottomAnchor="0.0"
+               AnchorPane.leftAnchor="241.0"
+               AnchorPane.rightAnchor="10.0"
+               AnchorPane.topAnchor="41.0"/>
+</AnchorPane>

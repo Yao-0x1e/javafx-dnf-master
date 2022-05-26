@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import io.github.palexdev.materialfx.controls.MFXButton?>
+<?import io.github.palexdev.materialfx.controls.MFXTextField?>
+<?import javafx.scene.layout.*?>
+<?import io.github.palexdev.materialfx.controls.MFXPasswordField?>
+<GridPane xmlns="http://javafx.com/javafx"
+          xmlns:fx="http://javafx.com/fxml"
+          fx:controller="com.garena.dnfmaster.controller.DatabasePanelController"
+          alignment="CENTER"
+          hgap="20.0"
+          vgap="20.0"
+          styleClass="grid-pane"
+          stylesheets="@../css/Buttons.css,@../css/TextFields.css">
+
+    <MFXTextField floatingText="地址"
+                  text="192.168.200.131"
+                  prefWidth="320"
+                  GridPane.rowIndex="0"
+                  GridPane.columnIndex="0"
+                  GridPane.columnSpan="2"
+                  styleClass="mfx-text-field"/>
+
+    <MFXTextField floatingText="端口"
+                  text="3306"
+                  prefWidth="320"
+                  GridPane.rowIndex="1"
+                  GridPane.columnIndex="0"
+                  GridPane.columnSpan="2"
+                  styleClass="mfx-text-field"/>
+
+    <MFXTextField floatingText="用户"
+                  text="game"
+                  prefWidth="320"
+                  GridPane.rowIndex="2"
+                  GridPane.columnIndex="0"
+                  GridPane.columnSpan="2"
+                  styleClass="mfx-text-field"/>
+
+    <MFXPasswordField floatingText="密码"
+                      text="uu5!^%jg"
+                      prefWidth="320"
+                      GridPane.rowIndex="3"
+                      GridPane.columnIndex="0"
+                      GridPane.columnSpan="2"
+                      styleClass="mfx-text-field"/>
+
+    <MFXButton minHeight="30.0"
+               minWidth="150.0"
+               styleClass="outline-button"
+               text="连接"
+               GridPane.columnIndex="0"
+               GridPane.rowIndex="4"/>
+
+    <MFXButton disable="true"
+               minHeight="30.0"
+               minWidth="150.0"
+               styleClass="outline-button"
+               text="断开"
+               GridPane.columnIndex="1"
+               GridPane.rowIndex="4"/>
+</GridPane>

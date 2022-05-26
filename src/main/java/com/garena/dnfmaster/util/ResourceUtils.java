@@ -1,15 +1,15 @@
-package com.garena.dnfmaster.app;
+package com.garena.dnfmaster.util;
 
 import java.io.InputStream;
 import java.net.URL;
 
-public class MFXAppResourcesLoader {
+public class ResourceUtils {
 
-    private MFXAppResourcesLoader() {
+    private ResourceUtils() {
     }
 
     public static URL loadURL(String path) {
-        return MFXAppResourcesLoader.class.getResource(path);
+        return ResourceUtils.class.getResource(path);
     }
 
     public static String load(String path) {
@@ -17,7 +17,7 @@ public class MFXAppResourcesLoader {
     }
 
     public static InputStream loadStream(String name) {
-        return MFXAppResourcesLoader.class.getResourceAsStream(name);
+        return ResourceUtils.class.getResourceAsStream(name);
     }
 
 }

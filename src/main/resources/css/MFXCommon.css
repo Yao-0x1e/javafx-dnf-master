@@ -16,33 +16,34 @@
  * along with MaterialFX.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+@import '../font/Fonts.css';
 @import 'MFXColors.css';
 
-.notification {
-    -fx-background-color: white;
-    -fx-background-radius: 5;
-    -fx-border-color: #ebebeb;
-    -fx-border-radius: 5;
-}
-
-.notification .label {
+.header-label {
     -fx-font-family: 'Visby Round CF Bold';
+    -fx-font-size: 14;
     -fx-text-fill: -mfx-text-he;
 }
 
-.notification .content {
-    -fx-padding: 10;
-    -fx-font-family: 'Visby Round CF Medium';
+.header-label .text {
+    -fx-font-smoothing-type: lcd;
 }
 
-.notification .mfx-button {
-    -fx-min-height: 27;
-    -fx-border-color: -mfx-purple;
-    -fx-border-radius: 3;
-    -fx-text-fill: -mfx-purple;
+.sub-header-label {
+    -fx-font-family: 'Visby Round CF Demi Bold';
+    -fx-text-fill: -mfx-text-he;
 }
 
-.notification .mfx-button .mfx-ripple-generator {
-    -mfx-auto-clip: true;
-    -mfx-ripple-color: derive(#7a0ed9, 125%);
+.sub-header-label .text {
+    -fx-font-smoothing-type: lcd;
+}
+
+.grid-pane {
+    -fx-background-color: transparent;
+}
+
+.grid-background {
+    -fx-background-color: white;
+    -fx-background-radius: 10;
+    -fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.2), 10, 0.12, -1.0, 2.0);
 }
