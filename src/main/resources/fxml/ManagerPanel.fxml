@@ -1,0 +1,96 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import io.github.palexdev.materialfx.controls.MFXComboBox?>
+<?import io.github.palexdev.materialfx.controls.MFXTableView?>
+<?import javafx.scene.layout.*?>
+<?import javafx.geometry.Insets?>
+<?import io.github.palexdev.materialfx.controls.MFXButton?>
+<HBox xmlns="http://javafx.com/javafx"
+      xmlns:fx="http://javafx.com/fxml"
+      fx:controller="com.garena.dnfmaster.controller.ManagerPanelController"
+      alignment="CENTER_LEFT"
+      spacing="30"
+      stylesheets="@../css/Buttons.css,@../css/ComboBoxes.css">
+    <padding>
+        <Insets topRightBottomLeft="30"/>
+    </padding>
+    <MFXTableView fx:id="characTableView"
+                  prefHeight="550.0"
+                  prefWidth="300.0"/>
+
+    <GridPane alignment="TOP_CENTER"
+              styleClass="grid-pane"
+              vgap="20.0"
+              hgap="20.0">
+
+        <MFXComboBox fx:id="valComboBox"
+                     floatingText="数值修改"
+                     prefWidth="200"
+                     prefHeight="45"
+                     GridPane.rowIndex="0"
+                     GridPane.columnIndex="0"/>
+
+        <MFXButton prefWidth="100"
+                   prefHeight="40"
+                   styleClass="outline-button"
+                   text="修改"
+                   GridPane.rowIndex="0"
+                   GridPane.columnIndex="1"/>
+
+        <MFXComboBox fx:id="jobComboBox"
+                     floatingText="职业修改"
+                     prefWidth="200"
+                     prefHeight="45"
+                     GridPane.rowIndex="1"
+                     GridPane.columnIndex="0"/>
+
+        <MFXButton prefWidth="100"
+                   prefHeight="40"
+                   styleClass="outline-button"
+                   text="转职"
+                   GridPane.rowIndex="1"
+                   GridPane.columnIndex="1"/>
+
+        <MFXComboBox fx:id="clearComboBox"
+                     floatingText="清理功能"
+                     prefWidth="200"
+                     prefHeight="45"
+                     GridPane.rowIndex="2"
+                     GridPane.columnIndex="0"/>
+
+        <MFXButton prefWidth="100"
+                   prefHeight="40"
+                   styleClass="outline-button"
+                   text="清理"
+                   GridPane.rowIndex="2"
+                   GridPane.columnIndex="1"/>
+
+        <MFXComboBox fx:id="eventComboBox"
+                     floatingText="活动管理"
+                     prefWidth="200"
+                     prefHeight="45"
+                     GridPane.rowIndex="3"
+                     GridPane.columnIndex="0"/>
+
+        <MFXButton prefWidth="100"
+                   prefHeight="40"
+                   styleClass="outline-button"
+                   text="开启"
+                   GridPane.rowIndex="3"
+                   GridPane.columnIndex="1"/>
+
+        <MFXComboBox fx:id="otherComboBox"
+                     floatingText="其它功能"
+                     prefWidth="200"
+                     prefHeight="45"
+                     GridPane.rowIndex="4"
+                     GridPane.columnIndex="0"/>
+
+        <MFXButton prefWidth="100"
+                   prefHeight="40"
+                   styleClass="outline-button"
+                   text="执行"
+                   GridPane.rowIndex="4"
+                   GridPane.columnIndex="1"/>
+    </GridPane>
+</HBox>

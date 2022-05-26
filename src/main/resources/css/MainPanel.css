@@ -19,16 +19,12 @@
 @import '../font/Fonts.css';
 @import 'MFXColors.css';
 
-/* Root Pane */
-
 .rootPane {
     -fx-background-color: white;
     -fx-background-radius: 10;
     -fx-border-color: #ebebeb;
     -fx-border-radius: 10;
 }
-
-/* Window Header */
 
 .rootPane .close-icon {
     -mfx-color: -mfx-red;
@@ -47,8 +43,6 @@
 .rootPane .minimize-icon:hover {
     -fx-opacity: 1.0;
 }
-
-/* Sidebar */
 
 .rootPane .sidebar {
     -fx-background-color: -mfx-purple;

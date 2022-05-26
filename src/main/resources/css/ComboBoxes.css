@@ -21,11 +21,15 @@
 @import 'MFXColors.css';
 
 
-.mfx-text-field {
-    -fx-min-width: 130;
+.mfx-legacy-combo-box {
+    -fx-min-width: 120;
+}
+
+.mfx-combo-box {
+    -fx-min-width: 150;
     -fx-font-family: 'Visby Round CF Medium';
 }
 
-.mfx-text-field .floating-text {
-    -fx-font-family: 'Visby Round CF Medium';
+.mfx-combo-box .floating-text {
+    -fx-font-family: 'Visby Round CF Demi Bold';
 }

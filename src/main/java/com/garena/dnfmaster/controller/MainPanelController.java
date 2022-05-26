@@ -67,7 +67,8 @@ public class MainPanelController implements Initializable {
     private void initializeLoader() {
         MFXLoader loader = new MFXLoader();
         loader.addView(MFXLoaderBean.of("DatabasePanel", loadURL("/fxml/DatabasePanel.fxml")).setBeanToNodeMapper(() -> createToggle("mfx-table", "数据库配置")).setDefaultRoot(true).get());
-        loader.addView(MFXLoaderBean.of("AccountPanel", loadURL("/fxml/AccountPanel.fxml")).setBeanToNodeMapper(() -> createToggle("mfx-user", "账号配置")).setDefaultRoot(true).get());
+        loader.addView(MFXLoaderBean.of("AccountPanel", loadURL("/fxml/AccountPanel.fxml")).setBeanToNodeMapper(() -> createToggle("mfx-user", "账号配置")).setDefaultRoot(false).get());
+        loader.addView(MFXLoaderBean.of("ManagerPanel", loadURL("/fxml/ManagerPanel.fxml")).setBeanToNodeMapper(() -> createToggle("mfx-toggle-on", "超级功能")).setDefaultRoot(false).get());
         loader.setOnLoadedAction(beans -> {
             List<ToggleButton> nodes = beans.stream().map(bean -> {
                 ToggleButton toggle = (ToggleButton) bean.getBeanToNodeMapper().get();
