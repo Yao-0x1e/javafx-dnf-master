@@ -19,7 +19,8 @@
                   GridPane.rowIndex="0"
                   GridPane.columnIndex="0"
                   GridPane.columnSpan="2"
-                  styleClass="mfx-text-field"/>
+                  styleClass="mfx-text-field"
+                  fx:id="hostField"/>
 
     <MFXTextField floatingText="端口"
                   text="3306"
@@ -27,7 +28,8 @@
                   GridPane.rowIndex="1"
                   GridPane.columnIndex="0"
                   GridPane.columnSpan="2"
-                  styleClass="mfx-text-field"/>
+                  styleClass="mfx-text-field"
+                  fx:id="portField"/>
 
     <MFXTextField floatingText="用户"
                   text="game"
@@ -35,7 +37,8 @@
                   GridPane.rowIndex="2"
                   GridPane.columnIndex="0"
                   GridPane.columnSpan="2"
-                  styleClass="mfx-text-field"/>
+                  styleClass="mfx-text-field"
+                  fx:id="usernameField"/>
 
     <MFXPasswordField floatingText="密码"
                       text="uu5!^%jg"
@@ -43,20 +46,22 @@
                       GridPane.rowIndex="3"
                       GridPane.columnIndex="0"
                       GridPane.columnSpan="2"
-                      styleClass="mfx-text-field"/>
+                      styleClass="mfx-text-field"
+                      fx:id="passwordField"/>
 
     <MFXButton minHeight="30.0"
                minWidth="150.0"
                styleClass="outline-button"
                text="连接"
                GridPane.columnIndex="0"
-               GridPane.rowIndex="4"/>
+               GridPane.rowIndex="4"
+               onMouseClicked="#onConnectButtonClicked"/>
 
-    <MFXButton disable="true"
-               minHeight="30.0"
+    <MFXButton minHeight="30.0"
                minWidth="150.0"
                styleClass="outline-button"
                text="断开"
                GridPane.columnIndex="1"
-               GridPane.rowIndex="4"/>
+               GridPane.rowIndex="4"
+               onMouseClicked="#onDisconnectButtonClicked"/>
 </GridPane>

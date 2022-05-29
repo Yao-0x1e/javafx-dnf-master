@@ -7,7 +7,7 @@
 <?import io.github.palexdev.materialfx.controls.MFXButton?>
 <HBox xmlns="http://javafx.com/javafx"
       xmlns:fx="http://javafx.com/fxml"
-      fx:controller="com.garena.dnfmaster.controller.ManagerPanelController"
+      fx:controller="com.garena.dnfmaster.controller.AdminPanelController"
       alignment="CENTER_LEFT"
       spacing="30"
       stylesheets="@../css/Buttons.css,@../css/ComboBoxes.css">
@@ -23,8 +23,8 @@
               vgap="20.0"
               hgap="20.0">
 
-        <MFXComboBox fx:id="valComboBox"
-                     floatingText="数值修改"
+        <MFXComboBox fx:id="valueComboBox"
+                     floatingText="数值选项"
                      prefWidth="200"
                      prefHeight="45"
                      GridPane.rowIndex="0"
@@ -35,10 +35,11 @@
                    styleClass="outline-button"
                    text="修改"
                    GridPane.rowIndex="0"
-                   GridPane.columnIndex="1"/>
+                   GridPane.columnIndex="1"
+                   onMouseClicked="#onValueButtonClicked"/>
 
         <MFXComboBox fx:id="jobComboBox"
-                     floatingText="职业修改"
+                     floatingText="职业选项"
                      prefWidth="200"
                      prefHeight="45"
                      GridPane.rowIndex="1"
@@ -49,10 +50,11 @@
                    styleClass="outline-button"
                    text="转职"
                    GridPane.rowIndex="1"
-                   GridPane.columnIndex="1"/>
+                   GridPane.columnIndex="1"
+                   onMouseClicked="#onJobButtonClicked"/>
 
         <MFXComboBox fx:id="clearComboBox"
-                     floatingText="清理功能"
+                     floatingText="清理选项"
                      prefWidth="200"
                      prefHeight="45"
                      GridPane.rowIndex="2"
@@ -61,12 +63,13 @@
         <MFXButton prefWidth="100"
                    prefHeight="40"
                    styleClass="outline-button"
-                   text="清理"
+                   text="清空"
                    GridPane.rowIndex="2"
-                   GridPane.columnIndex="1"/>
+                   GridPane.columnIndex="1"
+                   onMouseClicked="#onClearButtonClicked"/>
 
         <MFXComboBox fx:id="eventComboBox"
-                     floatingText="活动管理"
+                     floatingText="活动选项"
                      prefWidth="200"
                      prefHeight="45"
                      GridPane.rowIndex="3"
@@ -77,10 +80,11 @@
                    styleClass="outline-button"
                    text="开启"
                    GridPane.rowIndex="3"
-                   GridPane.columnIndex="1"/>
+                   GridPane.columnIndex="1"
+                   onMouseClicked="#onEventButtonClicked"/>
 
         <MFXComboBox fx:id="otherComboBox"
-                     floatingText="其它功能"
+                     floatingText="其他选项"
                      prefWidth="200"
                      prefHeight="45"
                      GridPane.rowIndex="4"
@@ -89,8 +93,9 @@
         <MFXButton prefWidth="100"
                    prefHeight="40"
                    styleClass="outline-button"
-                   text="执行"
+                   text="应用"
                    GridPane.rowIndex="4"
-                   GridPane.columnIndex="1"/>
+                   GridPane.columnIndex="1"
+                   onMouseClicked="#onOtherButtonClicked"/>
     </GridPane>
 </HBox>

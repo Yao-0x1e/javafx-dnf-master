@@ -1,5 +1,6 @@
 package com.garena.dnfmaster.controller;
 
+import com.garena.dnfmaster.util.AppContextUtils;
 import io.github.palexdev.materialfx.controls.MFXIconWrapper;
 import io.github.palexdev.materialfx.controls.MFXRectangleToggleNode;
 import io.github.palexdev.materialfx.controls.MFXScrollPane;
@@ -53,6 +54,7 @@ public class MainPanelController implements Initializable {
         this.stage = stage;
         this.toggleGroup = new ToggleGroup();
         ToggleUtils.addAlwaysOneSelectedSupport(toggleGroup);
+        AppContextUtils.addBean(MainPanelController.class, this);
     }
 
     private ToggleButton createToggle(String icon, String text) {
@@ -68,7 +70,8 @@ public class MainPanelController implements Initializable {
         MFXLoader loader = new MFXLoader();
         loader.addView(MFXLoaderBean.of("DatabasePanel", loadURL("/fxml/DatabasePanel.fxml")).setBeanToNodeMapper(() -> createToggle("mfx-table", "数据库配置")).setDefaultRoot(true).get());
         loader.addView(MFXLoaderBean.of("AccountPanel", loadURL("/fxml/AccountPanel.fxml")).setBeanToNodeMapper(() -> createToggle("mfx-user", "账号配置")).setDefaultRoot(false).get());
-        loader.addView(MFXLoaderBean.of("ManagerPanel", loadURL("/fxml/ManagerPanel.fxml")).setBeanToNodeMapper(() -> createToggle("mfx-toggle-on", "超级功能")).setDefaultRoot(false).get());
+        loader.addView(MFXLoaderBean.of("AdminPanel", loadURL("/fxml/AdminPanel.fxml")).setBeanToNodeMapper(() -> createToggle("mfx-toggle-on", "管理员功能")).setDefaultRoot(false).get());
+        loader.addView(MFXLoaderBean.of("MailPanel", loadURL("/fxml/MailPanel.fxml")).setBeanToNodeMapper(() -> createToggle("mfx-message", "邮件功能")).setDefaultRoot(false).get());
         loader.setOnLoadedAction(beans -> {
             List<ToggleButton> nodes = beans.stream().map(bean -> {
                 ToggleButton toggle = (ToggleButton) bean.getBeanToNodeMapper().get();

@@ -10,7 +10,6 @@ public class MailDao {
     @Autowired
     private JdbcTemplate jdbcTemplate;
 
-
     public void sendMail(int characNo, int itemId, int itemQuantity, int upgrade, int seperateUpgrade, int amplifyOption, int goldQuantity, boolean isAvata, boolean isCreature) {
         Integer letterId = this.jdbcTemplate.queryForObject("select max(letter_id) from taiwan_cain_2nd.postal", Integer.class);
         letterId = letterId == null ? 1 : letterId + 1;
@@ -23,5 +22,4 @@ public class MailDao {
     public void clearMails() {
         this.jdbcTemplate.batchUpdate("truncate taiwan_cain_2nd.postal;", "truncate taiwan_cain_2nd.letter;");
     }
-
 }

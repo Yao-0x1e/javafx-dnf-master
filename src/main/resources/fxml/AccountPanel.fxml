@@ -6,7 +6,7 @@
 <?import javafx.scene.layout.*?>
 <GridPane xmlns="http://javafx.com/javafx"
           xmlns:fx="http://javafx.com/fxml"
-          fx:controller="com.garena.dnfmaster.controller.DatabasePanelController"
+          fx:controller="com.garena.dnfmaster.controller.AccountPanelController"
           alignment="CENTER"
           hgap="20.0"
           vgap="20.0"
@@ -18,41 +18,47 @@
                   GridPane.rowIndex="0"
                   GridPane.columnIndex="0"
                   GridPane.columnSpan="2"
-                  styleClass="mfx-text-field"/>
+                  styleClass="mfx-text-field"
+                  fx:id="accountUsernameField"/>
 
     <MFXPasswordField floatingText="密码"
                       prefWidth="320"
                       GridPane.rowIndex="1"
                       GridPane.columnIndex="0"
                       GridPane.columnSpan="2"
-                      styleClass="mfx-text-field"/>
+                      styleClass="mfx-text-field"
+                      fx:id="accountPasswordField"/>
 
     <MFXButton minHeight="30.0"
                minWidth="150.0"
                styleClass="outline-button"
-               text="启动游戏"
+               text="登录游戏"
                GridPane.columnIndex="0"
-               GridPane.rowIndex="2"/>
+               GridPane.rowIndex="2"
+               onMouseClicked="#onLoginButtonClicked"/>
 
     <MFXButton minHeight="30.0"
                minWidth="150.0"
                styleClass="outline-button"
                text="刷新角色"
                GridPane.columnIndex="1"
-               GridPane.rowIndex="2"/>
+               GridPane.rowIndex="2"
+               onMouseClicked="#onCharacterRefreshButtonClicked"/>
 
     <MFXButton minHeight="30.0"
                minWidth="150.0"
                styleClass="outline-button"
                text="注册账号"
                GridPane.columnIndex="0"
-               GridPane.rowIndex="3"/>
+               GridPane.rowIndex="3"
+               onMouseClicked="#onRegisterButtonClicked"/>
 
     <MFXButton minHeight="30.0"
                minWidth="150.0"
                styleClass="outline-button"
                text="修改密码"
                GridPane.columnIndex="1"
-               GridPane.rowIndex="3"/>
+               GridPane.rowIndex="3"
+               onMouseClicked="#onPasswordChangeButtonClicked"/>
 </GridPane>
 

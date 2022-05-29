@@ -1,0 +1,87 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import io.github.palexdev.materialfx.controls.*?>
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.layout.*?>
+<HBox xmlns="http://javafx.com/javafx"
+      xmlns:fx="http://javafx.com/fxml"
+      fx:controller="com.garena.dnfmaster.controller.MailPanelController"
+      alignment="CENTER_LEFT"
+      spacing="30"
+      stylesheets="@../css/Buttons.css,@../css/ComboBoxes.css,@../css/TextFields.css">
+    <padding>
+        <Insets topRightBottomLeft="30"/>
+    </padding>
+    <MFXTableView fx:id="itemTableView"
+                  prefHeight="550.0"
+                  prefWidth="450.0"/>
+
+    <GridPane alignment="TOP_CENTER"
+              styleClass="grid-pane"
+              vgap="20.0"
+              hgap="20.0">
+        <MFXTextField floatingText="物品编号"
+                      text="0"
+                      prefWidth="200"
+                      GridPane.rowIndex="0"
+                      GridPane.columnIndex="0"
+                      GridPane.columnSpan="2"
+                      styleClass="mfx-text-field"/>
+
+        <MFXTextField floatingText="金币数量"
+                      text="0"
+                      prefWidth="200"
+                      GridPane.rowIndex="1"
+                      GridPane.columnIndex="0"
+                      GridPane.columnSpan="2"
+                      styleClass="mfx-text-field"/>
+
+        <MFXTextField floatingText="强化等级"
+                      text="0"
+                      prefWidth="200"
+                      GridPane.rowIndex="2"
+                      GridPane.columnIndex="0"
+                      GridPane.columnSpan="2"
+                      styleClass="mfx-text-field"/>
+
+        <MFXTextField floatingText="增幅等级"
+                      text="0"
+                      prefWidth="200"
+                      GridPane.rowIndex="3"
+                      GridPane.columnIndex="0"
+                      GridPane.columnSpan="2"
+                      styleClass="mfx-text-field"/>
+
+        <MFXComboBox fx:id="amplifyComboBox"
+                     floatingText="增幅属性"
+                     prefWidth="200"
+                     prefHeight="50"
+                     GridPane.rowIndex="4"
+                     GridPane.columnIndex="0"
+                     GridPane.columnSpan="2"/>
+
+        <MFXComboBox fx:id="mailTypeComboBox"
+                     floatingText="邮件类型"
+                     prefWidth="200"
+                     prefHeight="50"
+                     GridPane.rowIndex="5"
+                     GridPane.columnIndex="0"
+                     GridPane.columnSpan="2"/>
+
+        <MFXButton minHeight="40.0"
+                   minWidth="90.0"
+                   styleClass="outline-button"
+                   text="发送"
+                   GridPane.columnIndex="0"
+                   GridPane.rowIndex="6"
+                   onMouseClicked="#onSendButtonClicked"/>
+
+        <MFXButton minHeight="40.0"
+                   minWidth="90.0"
+                   styleClass="outline-button"
+                   text="清空"
+                   GridPane.columnIndex="1"
+                   GridPane.rowIndex="6"
+                   onMouseClicked="#onClearButtonClicked"/>
+    </GridPane>
+</HBox>
