@@ -21,6 +21,7 @@ import java.net.URL;
 import java.nio.charset.StandardCharsets;
 import java.util.*;
 
+
 public class MailPanelController implements Initializable {
     @FXML
     private MFXTableView<Item> itemTableView;
@@ -28,9 +29,12 @@ public class MailPanelController implements Initializable {
     private MFXComboBox<String> amplifyComboBox;
     @FXML
     private MFXComboBox<String> mailTypeComboBox;
+    @FXML
+    private MFXComboBox<String> sealComboBox;
 
     private final String[] amplifyOptions = {"无红字", "体力", "精神", "力量", "智力"};
     private final String[] mailTypeOptions = {"普通邮件", "装扮邮件", "宠物邮件"};
+    private final String[] sealOptions = {"是", "否"};
 
     private List<Item> parseItems() throws IOException {
         Resource resource = new ClassPathResource("raw/items.txt");
@@ -71,7 +75,8 @@ public class MailPanelController implements Initializable {
     private void setupComboBoxes() {
         List<Pair<MFXComboBox<String>, String[]>> pairs = Arrays.asList(
                 new Pair<>(amplifyComboBox, amplifyOptions),
-                new Pair<>(mailTypeComboBox, mailTypeOptions)
+                new Pair<>(mailTypeComboBox, mailTypeOptions),
+                new Pair<>(sealComboBox, sealOptions)
         );
 
         pairs.forEach(pair -> {

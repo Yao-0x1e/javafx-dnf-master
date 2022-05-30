@@ -53,7 +53,7 @@
                       styleClass="mfx-text-field"/>
 
         <MFXComboBox fx:id="amplifyComboBox"
-                     floatingText="增幅属性"
+                     floatingText="红字属性"
                      prefWidth="200"
                      prefHeight="50"
                      GridPane.rowIndex="4"
@@ -68,12 +68,20 @@
                      GridPane.columnIndex="0"
                      GridPane.columnSpan="2"/>
 
+        <MFXComboBox fx:id="sealComboBox"
+                     floatingText="封装选项"
+                     prefWidth="200"
+                     prefHeight="50"
+                     GridPane.rowIndex="6"
+                     GridPane.columnIndex="0"
+                     GridPane.columnSpan="2"/>
+
         <MFXButton minHeight="40.0"
                    minWidth="90.0"
                    styleClass="outline-button"
                    text="发送"
                    GridPane.columnIndex="0"
-                   GridPane.rowIndex="6"
+                   GridPane.rowIndex="7"
                    onMouseClicked="#onSendButtonClicked"/>
 
         <MFXButton minHeight="40.0"
@@ -81,7 +89,7 @@
                    styleClass="outline-button"
                    text="清空"
                    GridPane.columnIndex="1"
-                   GridPane.rowIndex="6"
+                   GridPane.rowIndex="7"
                    onMouseClicked="#onClearButtonClicked"/>
     </GridPane>
 </HBox>

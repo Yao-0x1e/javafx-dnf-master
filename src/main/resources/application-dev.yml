@@ -1,4 +1,6 @@
 spring:
+  application:
+    name: dnf-master
   aop:
     auto: true
     proxy-target-class: true
