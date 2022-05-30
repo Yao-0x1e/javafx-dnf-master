@@ -1,11 +1,11 @@
 package com.garena.dnfmaster.service;
 
-import com.garena.dnfmaster.repo.AccountRepo;
+import com.garena.dnfmaster.repo.EventRepo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 @Service
-public class AccountService {
+public class EventService {
     @Autowired
-    private AccountRepo accountRepo;
+    private EventRepo eventRepo;
 }

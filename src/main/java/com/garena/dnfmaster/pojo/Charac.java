@@ -8,7 +8,7 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 public class Charac {
-    private int id;
+    private int no;
     private String name;
     private int level;
 }

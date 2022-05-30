@@ -71,7 +71,7 @@ public class DialogUtils {
         showDialog(null, null, title, message);
     }
 
-    public static boolean showConfirmationDialogAndWait(String title, String headerText, String contentText) {
+    public static boolean showConfirmationDialog(String title, String headerText, String contentText) {
         Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
         alert.setTitle(title);
         alert.setHeaderText(headerText);
@@ -85,7 +85,7 @@ public class DialogUtils {
         return result.isPresent() && result.get() == confirmButton;
     }
 
-    public static String showInputDialogAndWait(String title, String headerText, String label) {
+    public static String showInputDialog(String title, String headerText, String label) {
         TextInputDialog dialog = new TextInputDialog("");
         dialog.setTitle(title);
         dialog.setHeaderText(headerText);
@@ -95,7 +95,7 @@ public class DialogUtils {
         return result.orElse(null);
     }
 
-    public static String showChoiceDialogAndWait(String title, String headerText, String label, List<String> options) {
+    public static String showChoiceDialog(String title, String headerText, String label, List<String> options) {
         assert options != null && !options.isEmpty();
         ChoiceDialog<String> dialog = new ChoiceDialog<>(options.get(0), options);
         dialog.setTitle(title);

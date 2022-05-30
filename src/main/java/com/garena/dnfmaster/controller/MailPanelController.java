@@ -1,7 +1,6 @@
 package com.garena.dnfmaster.controller;
 
 import com.garena.dnfmaster.pojo.Item;
-import com.garena.dnfmaster.util.AppContextUtils;
 import io.github.palexdev.materialfx.controls.MFXComboBox;
 import io.github.palexdev.materialfx.controls.MFXTableColumn;
 import io.github.palexdev.materialfx.controls.MFXTableView;
@@ -30,14 +29,10 @@ public class MailPanelController implements Initializable {
     @FXML
     private MFXComboBox<String> mailTypeComboBox;
 
-    private final String[] amplifyOptions = {"无属性", "力量", "智力", "体力", "精神"};
+    private final String[] amplifyOptions = {"无红字", "体力", "精神", "力量", "智力"};
     private final String[] mailTypeOptions = {"普通邮件", "装扮邮件", "宠物邮件"};
 
-    public MailPanelController() {
-        AppContextUtils.addBean(MailPanelController.class, this);
-    }
-
-    private List<Item> readItems() throws IOException {
+    private List<Item> parseItems() throws IOException {
         Resource resource = new ClassPathResource("raw/items.txt");
         List<String> lines = IOUtils.readLines(resource.getInputStream(), StandardCharsets.UTF_8);
         List<Item> items = new ArrayList<>(lines.size());
@@ -70,7 +65,7 @@ public class MailPanelController implements Initializable {
                 new IntegerFilter<>("编号", Item::getId),
                 new StringFilter<>("名称", Item::getName)
         );
-        itemTableView.getItems().addAll(readItems());
+        itemTableView.getItems().addAll(parseItems());
     }
 
     private void setupComboBoxes() {

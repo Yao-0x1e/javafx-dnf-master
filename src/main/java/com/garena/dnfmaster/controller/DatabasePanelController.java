@@ -20,18 +20,11 @@ public class DatabasePanelController {
 
     public DatabasePanelController() {
         databaseService = AppContextUtils.getBean(DatabaseService.class);
-        AppContextUtils.addBean(DatabasePanelController.class, this);
     }
 
-    public void onConnectButtonClicked() throws Exception {
-        String host = hostField.getText();
-        int port = Integer.parseInt(portField.getText());
-        String username = usernameField.getText();
-        String password = passwordField.getText();
-        databaseService.connect(username, password, host, port);
+    public void onConnectButtonClicked() {
     }
 
-    public void onDisconnectButtonClicked() throws Exception {
-        databaseService.disconnect();
+    public void onDisconnectButtonClicked() {
     }
 }

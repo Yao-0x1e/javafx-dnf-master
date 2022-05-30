@@ -1,4 +1,4 @@
-package com.garena.dnfmaster.dao;
+package com.garena.dnfmaster.repo;
 
 import com.garena.dnfmaster.pojo.Charac;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -11,33 +11,35 @@ import java.util.Map;
 
 @Component
 @SuppressWarnings("SqlNoDataSourceInspection")
-public class AccountDao {
+public class AccountRepo {
     @Autowired
     private JdbcTemplate jdbcTemplate;
 
     /**
      * Note: JdbcTemplate.queryForObject throws exception only if the size of returned rows equals 0
      */
-    public Integer findUidByAccountNameAndPassword(String accountName, String password) {
+    public Integer findUid(String accountName, String password) {
         return jdbcTemplate.queryForObject("select UID from d_taiwan.accounts where accountname=? and password=md5(?)", Integer.class, accountName, password);
     }
 
-    public Integer findUidByAccountName(String accountName) {
+    public Integer findUid(String accountName) {
         return jdbcTemplate.queryForObject("select UID from d_taiwan.accounts where accountname=?", Integer.class, accountName);
     }
 
-    public void createAccount(String accountName, String password) {
+    public int addAccount(String accountName, String password) {
         Integer uid = jdbcTemplate.queryForObject("select ifnull((select max(UID) from d_taiwan.accounts), 0)+1", Integer.class);
-        jdbcTemplate.update("insert into d_taiwan.accounts (uid,accountname,password) VALUES (?,?,md5(?))", uid, accountName, password);
-        jdbcTemplate.update("insert into d_taiwan.limit_create_character (m_id) VALUES (?)", uid);
-        jdbcTemplate.update("insert into d_taiwan.member_info (m_id,user_id) VALUES (?,?)", uid, uid);
-        jdbcTemplate.update("insert into d_taiwan.member_join_info (m_id) VALUES (?)", uid);
-        jdbcTemplate.update("insert into d_taiwan.member_miles (m_id) VALUES (?)", uid);
-        jdbcTemplate.update("insert into d_taiwan.member_white_account (m_id) VALUES (?)", uid);
-        jdbcTemplate.update("insert into taiwan_login.member_login (m_id) VALUES (?)", uid);
-        jdbcTemplate.update("insert into taiwan_billing.cash_cera (account,cera,mod_tran,mod_date,reg_date) VALUES (?,0,0,NOW(),NOW())", uid);
-        jdbcTemplate.update("insert into taiwan_billing.cash_cera_point (account,cera_point,reg_date,mod_date) VALUES (?,0,NOW(),NOW())", uid);
-        jdbcTemplate.update("insert into taiwan_cain_2nd.member_avatar_coin (m_id) VALUES (?)", uid);
+        int rows = 0;
+        rows += jdbcTemplate.update("insert into d_taiwan.accounts (uid,accountname,password) VALUES (?,?,md5(?))", uid, accountName, password);
+        rows += jdbcTemplate.update("insert into d_taiwan.limit_create_character (m_id) VALUES (?)", uid);
+        rows += jdbcTemplate.update("insert into d_taiwan.member_info (m_id,user_id) VALUES (?,?)", uid, uid);
+        rows += jdbcTemplate.update("insert into d_taiwan.member_join_info (m_id) VALUES (?)", uid);
+        rows += jdbcTemplate.update("insert into d_taiwan.member_miles (m_id) VALUES (?)", uid);
+        rows += jdbcTemplate.update("insert into d_taiwan.member_white_account (m_id) VALUES (?)", uid);
+        rows += jdbcTemplate.update("insert into taiwan_login.member_login (m_id) VALUES (?)", uid);
+        rows += jdbcTemplate.update("insert into taiwan_billing.cash_cera (account,cera,mod_tran,mod_date,reg_date) VALUES (?,0,0,NOW(),NOW())", uid);
+        rows += jdbcTemplate.update("insert into taiwan_billing.cash_cera_point (account,cera_point,reg_date,mod_date) VALUES (?,0,NOW(),NOW())", uid);
+        rows += jdbcTemplate.update("insert into taiwan_cain_2nd.member_avatar_coin (m_id) VALUES (?)", uid);
+        return rows;
     }
 
     public int setPassword(String accountName, String password) {
@@ -45,7 +47,7 @@ public class AccountDao {
     }
 
     public List<Charac> findCharacters(int uid) {
-        List<Map<String, Object>> list = this.jdbcTemplate.queryForList("select charac_no,convert(unhex(hex(convert(charac_name using latin1))) using utf8) as name,lev from taiwan_cain.charac_info where m_id=? and delete_flag<>1;", uid);
+        List<Map<String, Object>> list = jdbcTemplate.queryForList("select charac_no,convert(unhex(hex(convert(charac_name using latin1))) using utf8) as name,lev from taiwan_cain.charac_info where m_id=? and delete_flag<>1;", uid);
         List<Charac> characters = new ArrayList<>(list.size());
         list.forEach((map) -> {
             int id = (Integer) map.get("charac_no");
