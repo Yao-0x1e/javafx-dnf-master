@@ -54,6 +54,7 @@ public class ManagementPanelController implements Initializable {
         characService = AppContextUtils.getBean(CharacService.class);
         accountService = AppContextUtils.getBean(AccountService.class);
         eventService = AppContextUtils.getBean(EventService.class);
+        AppContextUtils.addBean(ManagementPanelController.class, this);
     }
 
     @SuppressWarnings("unchecked")
