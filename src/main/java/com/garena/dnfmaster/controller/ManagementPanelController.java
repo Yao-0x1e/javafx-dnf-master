@@ -184,14 +184,14 @@ public class ManagementPanelController implements Initializable {
             return;
         }
 
-        int expertJob = growTypeComboBox.getSelectedIndex();
+        int expertJob = expertJobComboBox.getSelectedIndex();
         characters.forEach(charac -> characService.setExpertJob(charac.getNo(), expertJob));
         List<String> characterNames = characters.stream().map(Charac::getName).collect(Collectors.toList());
         DialogUtils.showInfo("修改职业", "角色修改副职业成功：" + characterNames);
     }
 
     public void onClearButtonClicked() {
-        int selectedIndex = growTypeComboBox.getSelectedIndex();
+        int selectedIndex = clearComboBox.getSelectedIndex();
         List<Charac> characters = getSelectedCharacters();
         if (characters.isEmpty()) {
             DialogUtils.showError("修改职业", "请选定至少一个角色后再进行当前操作");
@@ -217,7 +217,17 @@ public class ManagementPanelController implements Initializable {
     }
 
     public void onEventButtonClicked() {
-
+        int selectedIndex = eventComboBox.getSelectedIndex();
+        if (selectedIndex == 0) {
+            eventService.unlimitCharacterCreation();
+        } else if (selectedIndex == 1) {
+            eventService.enableMultipleDrops();
+        } else if (selectedIndex == 2) {
+            eventService.unlimitFatiguePoint();
+        } else {
+            assert false;
+        }
+        DialogUtils.showInfo("活动添加", "开启活动成功：" + eventComboBox.getValue());
     }
 
     public void onOtherButtonClicked() {
