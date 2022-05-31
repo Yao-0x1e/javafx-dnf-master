@@ -113,26 +113,20 @@ public class AccountService {
         int cera = Integer.parseInt(inputCera);
         Assert.notNull(uid, "请确保已经登录游戏或刷新角色");
         Assert.isTrue(cera >= 0, "请确保输入的D币数值为非负整数");
-
         cashCeraMapper.update(uid, cera);
-        DialogUtils.showInfo("数值修改", "成功修改D币数量（重新登录游戏后即可生效）");
     }
 
     public void setCeraPoint(Integer uid, String inputCeraPoint) {
         int ceraPoint = Integer.parseInt(inputCeraPoint);
         Assert.notNull(uid, "请确保已经登录游戏或刷新角色");
         Assert.isTrue(ceraPoint >= 0, "请确保输入的D点数值为非负整数");
-
         cashCeraPointMapper.update(uid, ceraPoint);
-        DialogUtils.showInfo("数值修改", "成功修改D点数量（重新登录游戏后即可生效）");
     }
 
     public void setAvataCoin(Integer uid, String inputAvataCoin) {
         int avataCoin = Integer.parseInt(inputAvataCoin);
         Assert.notNull(uid, "请确保已经登录游戏或刷新角色");
         Assert.isTrue(avataCoin >= 0, "请确保输入的时装代币数量为非负整数");
-
         memberAvatarCoinMapper.update(uid, avataCoin);
-        DialogUtils.showInfo("数值修改", "成功修改时装代币数量（重新登录游戏后即可生效）");
     }
 }

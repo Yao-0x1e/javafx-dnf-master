@@ -1,5 +1,7 @@
 package com.garena.dnfmaster.controller;
 
+import cn.hutool.core.lang.Assert;
+import com.garena.dnfmaster.constant.GrowType;
 import com.garena.dnfmaster.pojo.Charac;
 import com.garena.dnfmaster.service.AccountService;
 import com.garena.dnfmaster.service.CharacService;
@@ -27,7 +29,7 @@ import java.util.stream.Collectors;
 
 public class ManagementPanelController implements Initializable {
     private final String[] valueOptions = {"D币", "D点", "时装代币", "普通技能点（SP）", "强化技能点（TP）", "任务技能点（QP）", "段位", "胜点", "胜场", "败场"};
-    private final String[] jobOptions = {"未转职", "职业一", "职业二", "职业三", "职业四", "职业一（觉醒）", "职业二（觉醒）", "职业三（觉醒）", "职业四（觉醒）"};
+    private final String[] growTypeOptions = {"未转职", "职业一", "职业二", "职业三", "职业四", "职业一（觉醒）", "职业二（觉醒）", "职业三（觉醒）", "职业四（觉醒）"};
     private final String[] expertJobOptions = {"无副职业", "附魔师", "炼金术士", "分解师", "控偶师"};
     private final String[] clearOptions = {"已接任务", "全部任务", "物品栏", "时装栏", "宠物栏"};
     private final String[] eventOptions = {"无限创建角色", "多倍爆率", "无限疲劳"};
@@ -38,7 +40,7 @@ public class ManagementPanelController implements Initializable {
     @FXML
     private MFXComboBox<String> valueComboBox;
     @FXML
-    private MFXComboBox<String> jobComboBox;
+    private MFXComboBox<String> growTypeComboBox;
     @FXML
     private MFXComboBox<String> expertJobComboBox;
     @FXML
@@ -85,7 +87,7 @@ public class ManagementPanelController implements Initializable {
     private void setupComboBoxes() {
         List<Pair<MFXComboBox<String>, String[]>> pairs = Arrays.asList(
                 new Pair<>(valueComboBox, valueOptions),
-                new Pair<>(jobComboBox, jobOptions),
+                new Pair<>(growTypeComboBox, growTypeOptions),
                 new Pair<>(expertJobComboBox, expertJobOptions),
                 new Pair<>(clearComboBox, clearOptions),
                 new Pair<>(eventComboBox, eventOptions),
@@ -112,12 +114,21 @@ public class ManagementPanelController implements Initializable {
         observableList.addAll(characters);
     }
 
+    public List<Charac> getSelectedCharacters() {
+        return characTableView.getItems();
+    }
+
     public void onValueButtonClicked() {
         int selectedIndex = valueComboBox.getSelectedIndex();
         Integer uid = AppContextUtils.getValue("uid", Integer.class);
-        String accountName = AppContextUtils.getValue("accountName", String.class);
+        List<Charac> characters = getSelectedCharacters();
+        if (selectedIndex >= 3 && characters.isEmpty()) {
+            DialogUtils.showError("修改数值", "请选定至少一个角色后再进行当前操作");
+            return;
+        }
+
         String inputValue = DialogUtils.showInputDialog("数值修改", "请输入修改后的数值", "数值：");
-        ObservableList<Charac> characters = characTableView.getItems();
+        Assert.notNull(inputValue);
         if (selectedIndex == 0) {
             accountService.setCera(uid, inputValue);
         } else if (selectedIndex == 1) {
@@ -143,20 +154,40 @@ public class ManagementPanelController implements Initializable {
         }
 
         if (selectedIndex <= 2) {
+            String accountName = AppContextUtils.getValue("accountName", String.class);
             DialogUtils.showInfo("修改数值", "账号数值修改成功：" + accountName);
         } else {
             List<String> characterNames = characters.stream().map(Charac::getName).collect(Collectors.toList());
             DialogUtils.showInfo("修改数值", "角色数值修改成功：" + characterNames);
         }
-
     }
 
-    public void onJobButtonClicked() {
+    public void onGrowTypeButtonClicked() {
+        int selectedIndex = growTypeComboBox.getSelectedIndex();
+        List<Charac> characters = getSelectedCharacters();
+        if (characters.isEmpty()) {
+            DialogUtils.showError("修改职业", "请选定至少一个角色后再进行当前操作");
+            return;
+        }
 
+        int job = selectedIndex <= 4 ? selectedIndex : GrowType.MIN_AWAKE_VALUE + (selectedIndex - 5);
+        characters.forEach(charac -> characService.setGrowType(charac.getNo(), job));
+
+        List<String> characterNames = characters.stream().map(Charac::getName).collect(Collectors.toList());
+        DialogUtils.showInfo("修改职业", "角色修改主职业成功：" + characterNames);
     }
 
     public void onExpertJobButtonClicked() {
+        int expertJob = growTypeComboBox.getSelectedIndex();
+        List<Charac> characters = getSelectedCharacters();
+        if (characters.isEmpty()) {
+            DialogUtils.showError("修改职业", "请选定至少一个角色后再进行当前操作");
+            return;
+        }
 
+        characters.forEach(charac -> characService.setExpertJob(charac.getNo(), expertJob));
+        List<String> characterNames = characters.stream().map(Charac::getName).collect(Collectors.toList());
+        DialogUtils.showInfo("修改职业", "角色修改副职业成功：" + characterNames);
     }
 
     public void onClearButtonClicked() {

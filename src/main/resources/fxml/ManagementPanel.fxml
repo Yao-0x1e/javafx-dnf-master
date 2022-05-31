@@ -38,7 +38,7 @@
                    GridPane.columnIndex="1"
                    onMouseClicked="#onValueButtonClicked"/>
 
-        <MFXComboBox fx:id="jobComboBox"
+        <MFXComboBox fx:id="growTypeComboBox"
                      floatingText="主职业选项"
                      prefWidth="200"
                      prefHeight="45"
@@ -51,7 +51,7 @@
                    text="转职"
                    GridPane.rowIndex="1"
                    GridPane.columnIndex="1"
-                   onMouseClicked="#onJobButtonClicked"/>
+                   onMouseClicked="#onGrowTypeButtonClicked"/>
 
         <MFXComboBox fx:id="expertJobComboBox"
                      floatingText="副职业选项"
