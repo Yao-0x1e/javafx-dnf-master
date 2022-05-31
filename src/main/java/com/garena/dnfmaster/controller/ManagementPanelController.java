@@ -163,13 +163,13 @@ public class ManagementPanelController implements Initializable {
     }
 
     public void onGrowTypeButtonClicked() {
-        int selectedIndex = growTypeComboBox.getSelectedIndex();
         List<Charac> characters = getSelectedCharacters();
         if (characters.isEmpty()) {
             DialogUtils.showError("修改职业", "请选定至少一个角色后再进行当前操作");
             return;
         }
 
+        int selectedIndex = growTypeComboBox.getSelectedIndex();
         int job = selectedIndex <= 4 ? selectedIndex : GrowType.MIN_AWAKE_VALUE + (selectedIndex - 5);
         characters.forEach(charac -> characService.setGrowType(charac.getNo(), job));
 
@@ -178,20 +178,42 @@ public class ManagementPanelController implements Initializable {
     }
 
     public void onExpertJobButtonClicked() {
-        int expertJob = growTypeComboBox.getSelectedIndex();
         List<Charac> characters = getSelectedCharacters();
         if (characters.isEmpty()) {
             DialogUtils.showError("修改职业", "请选定至少一个角色后再进行当前操作");
             return;
         }
 
+        int expertJob = growTypeComboBox.getSelectedIndex();
         characters.forEach(charac -> characService.setExpertJob(charac.getNo(), expertJob));
         List<String> characterNames = characters.stream().map(Charac::getName).collect(Collectors.toList());
         DialogUtils.showInfo("修改职业", "角色修改副职业成功：" + characterNames);
     }
 
     public void onClearButtonClicked() {
+        int selectedIndex = growTypeComboBox.getSelectedIndex();
+        List<Charac> characters = getSelectedCharacters();
+        if (characters.isEmpty()) {
+            DialogUtils.showError("修改职业", "请选定至少一个角色后再进行当前操作");
+            return;
+        }
 
+        if (selectedIndex == 0) {
+            characters.forEach(charac -> characService.clearQuests(charac.getNo()));
+        } else if (selectedIndex == 1) {
+            characters.forEach(charac -> characService.clearAllQuests(charac.getNo()));
+        } else if (selectedIndex == 2) {
+            characters.forEach(charac -> characService.clearInven(charac.getNo()));
+        } else if (selectedIndex == 3) {
+            characters.forEach(charac -> characService.clearAvatas(charac.getNo()));
+        } else if (selectedIndex == 4) {
+            characters.forEach(charac -> characService.clearCreatures(charac.getNo()));
+        } else {
+            assert false;
+        }
+
+        List<String> characterNames = characters.stream().map(Charac::getName).collect(Collectors.toList());
+        DialogUtils.showInfo("清理结果", "清理指定选项成功：" + characterNames);
     }
 
     public void onEventButtonClicked() {
