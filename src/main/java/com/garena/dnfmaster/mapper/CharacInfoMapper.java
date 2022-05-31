@@ -21,6 +21,9 @@ public interface CharacInfoMapper {
     @Update("update taiwan_cain.charac_info set grow_type=#{growType} where charac_no=#{characNo}")
     int setGrowType(int characNo, int growType);
 
+    @Update("update taiwan_cain.charac_stat set expert_job_exp=2054 where charac_no=#{characNo}")
+    int setMaxExpertJobLevel(int characNo);
+
     @Update("update taiwan_cain.charac_info set inven_weight=10000000 where charac_no=#{characNo}")
     int setMaxInvenWeight(int characNo);
 

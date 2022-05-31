@@ -6,6 +6,7 @@ import com.garena.dnfmaster.pojo.Charac;
 import com.garena.dnfmaster.service.AccountService;
 import com.garena.dnfmaster.service.CharacService;
 import com.garena.dnfmaster.service.EventService;
+import com.garena.dnfmaster.service.GuildService;
 import com.garena.dnfmaster.util.AppContextUtils;
 import com.garena.dnfmaster.util.DialogUtils;
 import io.github.palexdev.materialfx.controls.MFXComboBox;
@@ -33,7 +34,7 @@ public class ManagementPanelController implements Initializable {
     private final String[] expertJobOptions = {"无副职业", "附魔师", "炼金术士", "分解师", "控偶师"};
     private final String[] clearOptions = {"已接任务", "全部任务", "物品栏", "时装栏", "宠物栏"};
     private final String[] eventOptions = {"无限创建角色", "多倍爆率", "无限疲劳"};
-    private final String[] otherOptions = {"无限负重", "公会满级", "开启左右槽", "副职业满级", "解除装备限制", "填充克隆装扮", "全图地狱难度"};
+    private final String[] otherOptions = {"全图地狱难度", "解除装备限制", "填充克隆装扮", "开启左右槽", "副职业满级", "无限负重", "公会满级"};
 
     @FXML
     private MFXTableView<Charac> characTableView;
@@ -53,11 +54,13 @@ public class ManagementPanelController implements Initializable {
     private final CharacService characService;
     private final AccountService accountService;
     private final EventService eventService;
+    private final GuildService guildService;
 
     public ManagementPanelController() {
         characService = AppContextUtils.getBean(CharacService.class);
         accountService = AppContextUtils.getBean(AccountService.class);
         eventService = AppContextUtils.getBean(EventService.class);
+        guildService = AppContextUtils.getBean(GuildService.class);
         AppContextUtils.addBean(ManagementPanelController.class, this);
     }
 
@@ -231,6 +234,36 @@ public class ManagementPanelController implements Initializable {
     }
 
     public void onOtherButtonClicked() {
+        int selectedIndex = otherComboBox.getSelectedIndex();
 
+        List<Charac> characters = getSelectedCharacters();
+        if (selectedIndex != 0 && selectedIndex != 6 && characters.isEmpty()) {
+            DialogUtils.showError("非法操作", "请选定至少一个角色后再进行当前操作");
+            return;
+        }
+
+        if (selectedIndex == 0) {
+            Integer uid = AppContextUtils.getValue("uid", Integer.class);
+            accountService.unlockAllDungeons(uid);
+        } else if (selectedIndex == 1) {
+            characters.forEach(charac -> characService.setMaxEquipLevel(charac.getNo()));
+        } else if (selectedIndex == 2) {
+            characters.forEach(charac -> characService.fillCloneAvatas(charac.getNo()));
+        } else if (selectedIndex == 3) {
+            characters.forEach(charac -> characService.unlockSlots(charac.getNo()));
+        } else if (selectedIndex == 4) {
+            characters.forEach(charac -> characService.setMaxExpertJobLevel(charac.getNo()));
+        } else if (selectedIndex == 5) {
+            characters.forEach(charac -> characService.setMaxInvenWeight(charac.getNo()));
+        } else if (selectedIndex == 6) {
+            String guildName = DialogUtils.showInputDialog("修改公会", "请输入公会名称", "名称：");
+            if (guildName != null) {
+                guildService.setMaxGuildProperties(guildName);
+            }
+        } else {
+            assert false;
+        }
+
+        DialogUtils.showInfo("其他选项", "执行指定选项的操作成功");
     }
 }

@@ -9,5 +9,5 @@ public interface CharacStatMapper {
     int setMaxExpertJobLevel(int characNo);
 
     @Update("update taiwan_cain.charac_stat set add_slot_flag=3 where charac_no=#{characNo}")
-    int addSlots(int characNo);
+    int unlockSlots(int characNo);
 }

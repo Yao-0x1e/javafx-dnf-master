@@ -5,6 +5,7 @@ import com.garena.dnfmaster.constant.ExpertJob;
 import com.garena.dnfmaster.constant.GrowType;
 import com.garena.dnfmaster.constant.PvpGrade;
 import com.garena.dnfmaster.mapper.*;
+import lombok.SneakyThrows;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -31,6 +32,10 @@ public class CharacService {
     private NewCharacRequestMapper newCharacRequestMapper;
     @Autowired
     private CharacTitleBookMapper characTitleBookMapper;
+    @Autowired
+    private CharacManageInfoMapper characManageInfoMapper;
+    @Autowired
+    private CharacStatMapper characStatMapper;
 
     public void setSP(int characNo, String inputSP) {
         int sp = Integer.parseInt(inputSP);
@@ -92,6 +97,16 @@ public class CharacService {
         characInfoMapper.setExpertJob(characNo, expertJob);
     }
 
+    public void setMaxExpertJobLevel(int characNo) {
+        Integer expertJob = characInfoMapper.findExpertJob(characNo);
+        if (expertJob == null || expertJob == 0) {
+            characStatMapper.setMaxExpertJobLevel(characNo);
+        }
+    }
+
+    public void setMaxInvenWeight(int characNo) {
+        characInfoMapper.setMaxInvenWeight(characNo);
+    }
 
     public void clearInven(int characNo) {
         inventoryMapper.clearInven(characNo);
@@ -133,5 +148,65 @@ public class CharacService {
         String despair = "0x981C0000789CEDC13101000000C2A0F54F6D0A3FA000000000000000BE061C980001";
         newCharacRequestMapper.clearAllQuests(characNo, clearQuest, questNotify);
         characTitleBookMapper.update(characNo, specificSection, generalSection, despair);
+        characStatMapper.unlockSlots(characNo);
     }
+
+    
+    @Transactional
+    public void setMaxEquipLevel(int characNo) {
+        int rows = characManageInfoMapper.setMaxEquipLevel(characNo);
+        if (rows == 0) {
+            characManageInfoMapper.insertMaxEquipLevel(characNo);
+        }
+    }
+
+    public void unlockSlots(int characNo) {
+        characStatMapper.unlockSlots(characNo);
+    }
+
+    @Transactional
+    @SneakyThrows
+    public void fillCloneAvatas(int characNo) {
+        Integer job = characInfoMapper.findJob(characNo);
+        Assert.checkBetween(job, 0, 9, "无法识别角色的职业：" + characNo);
+        Integer equipAvataCount = userItemMapper.countEquipAvatas(characNo);
+        if (equipAvataCount != 0) {
+            throw new Exception("角色已经装备其他装扮：" + characNo);
+        }
+
+        int[][] itemIds = new int[][]{
+                {42601, 42603, 42605, 42609, 42611, 42615, 42607, 42613, 601580003},
+                {46601, 46603, 46605, 46609, 46611, 46615, 46607, 46613, 602580003},
+                {50601, 50603, 50605, 50609, 50611, 50615, 50607, 50613, 604580003},
+                {54601, 54603, 54605, 54609, 54611, 54615, 54607, 54613, 606580003},
+                {58601, 58603, 58605, 58609, 58611, 58615, 58607, 58613, 608580003},
+                {1690008, 1690009, 1690010, 1690012, 1690013, 1690015, 1690011, 1690014, 605580003},
+                {1810001, 1810003, 1810005, 1810009, 1810011, 1810015, 1810007, 1810013, 609580002},
+                {2050001, 2050003, 2050005, 2050009, 2050011, 2050015, 2050007, 2050013, 603580003},
+                {2170001, 2170003, 2170005, 2170009, 2170011, 2170015, 2170007, 2170013, 607580002},
+                {42601, 42603, 42605, 42609, 42611, 42615, 42607, 42613, 601580003}
+        };
+
+        int abilityNo = 0;
+        for (int slot = 0; slot < itemIds[job].length; ++slot) {
+            int itemId = itemIds[job][slot];
+            userItemMapper.addAvata(characNo, slot, itemId, abilityNo);
+        }
+    }
+
+    public void addAvata(int characNo, Integer itemId) {
+        Assert.isTrue(itemId >= 0, "非法装扮物品编号");
+        Integer maxSlot = userItemMapper.findMaxAvatarSlot(characNo);
+        int nextSlot = maxSlot == null ? 10 : maxSlot + 1;
+        userItemMapper.addAvata(characNo, nextSlot, itemId, 0);
+    }
+
+    public void addCreature(int characNo, Integer itemId, int creatureType) {
+        Assert.isTrue(itemId >= 0, "非法宠物物品编号");
+        Assert.checkBetween(creatureType, 0, 1, "宠物物品类型不正确");
+        Integer maxSlot = creatureItemMapper.findMaxCreatureSlot(characNo);
+        int nextSlot = maxSlot == null ? 0 : maxSlot + 1;
+        creatureItemMapper.addCreature(characNo, nextSlot, itemId, creatureType);
+    }
+
 }

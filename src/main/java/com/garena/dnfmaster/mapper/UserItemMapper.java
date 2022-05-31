@@ -1,9 +1,6 @@
 package com.garena.dnfmaster.mapper;
 
-import org.apache.ibatis.annotations.Delete;
-import org.apache.ibatis.annotations.Insert;
-import org.apache.ibatis.annotations.Mapper;
-import org.apache.ibatis.annotations.Select;
+import org.apache.ibatis.annotations.*;
 
 @Mapper
 public interface UserItemMapper {
@@ -17,5 +14,5 @@ public interface UserItemMapper {
     int addAvata(int characNo, int slot, int itemId, int abilityNo);
 
     @Select("select count(ui_id) from taiwan_cain_2nd.user_items where charac_no=#{characNo} and slot>=0 and slot<10")
-    Integer countEquippedAvatas(int characNo);
+    Integer countEquipAvatas(int characNo);
 }
