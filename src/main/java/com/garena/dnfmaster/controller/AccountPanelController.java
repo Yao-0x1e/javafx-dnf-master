@@ -44,5 +44,7 @@ public class AccountPanelController {
     }
 
     public void onCharacterRefreshButtonClicked() {
+        String accountName = accountUsernameField.getText();
+        accountService.refreshCharacters(accountName);
     }
 }

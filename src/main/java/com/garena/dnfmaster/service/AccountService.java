@@ -42,7 +42,7 @@ public class AccountService {
 
     @SneakyThrows
     public void login(String accountName, String password) {
-        Assert.notEmpty(accountName, "账号名称不能为空");
+        Assert.notEmpty(accountName, "账号名不能为空");
         Assert.notEmpty(password, "账号密码不能为空");
         boolean isWindows = System.getProperties().getProperty("os.name").toLowerCase().contains("windows");
         Assert.isTrue(isWindows, "请确保游戏运行在Windows系统下");
@@ -53,13 +53,13 @@ public class AccountService {
         String token = SecurityUtils.getToken(uid);
         Runtime runtime = Runtime.getRuntime();
         runtime.exec("cmd /c DNF.exe " + token);
-        refreshCharacters(uid);
+        refreshCharacters(accountName);
     }
 
     @SneakyThrows
     @Transactional
     public void register(String accountName, String password) {
-        Assert.notEmpty(accountName, "账号名称不能为空");
+        Assert.notEmpty(accountName, "账号名不能为空");
         Assert.notEmpty(password, "账号密码不能为空");
 
         Integer uid = accountMapper.findUidByAccountName(accountName);
@@ -80,9 +80,8 @@ public class AccountService {
         DialogUtils.showInfo("注册结果", "账号注册成功");
     }
 
-    @Transactional
     public void changePassword(String accountName, String oldPassword, String newPassword) {
-        Assert.notEmpty(accountName, "账号名称不能为空");
+        Assert.notEmpty(accountName, "账号名不能为空");
         Assert.notEmpty(oldPassword, "账号原密码不能为空");
         Assert.notEmpty(newPassword, "账号新密码不能为空");
 
@@ -93,15 +92,47 @@ public class AccountService {
     }
 
     public void refreshCharacters(String accountName) {
-        Assert.notEmpty(accountName, "账号名称不能为空");
+        Assert.notEmpty(accountName, "账号名不能为空");
+
         Integer uid = accountMapper.findUidByAccountName(accountName);
         Assert.notNull(uid, "账号不存在");
-        refreshCharacters(uid);
+        loadCharacters(uid);
+        DialogUtils.showInfo("刷新完成", "请到管理员功能面板查看角色列表");
+
+        AppContextUtils.putValue("uid", uid);
+        AppContextUtils.putValue("accountName", accountName);
     }
 
-    private void refreshCharacters(int uid) {
+    private void loadCharacters(int uid) {
         ManagementPanelController managementPanelController = AppContextUtils.getBean(ManagementPanelController.class);
         List<Charac> characters = characInfoMapper.getCharacters(uid);
-        managementPanelController.setCharacters(uid, characters);
+        managementPanelController.setCharacters(characters);
+    }
+
+    public void setCera(Integer uid, String inputCera) {
+        int cera = Integer.parseInt(inputCera);
+        Assert.notNull(uid, "请确保已经登录游戏或刷新角色");
+        Assert.isTrue(cera >= 0, "请确保输入的D币数值为非负整数");
+
+        cashCeraMapper.update(uid, cera);
+        DialogUtils.showInfo("数值修改", "成功修改D币数量（重新登录游戏后即可生效）");
+    }
+
+    public void setCeraPoint(Integer uid, String inputCeraPoint) {
+        int ceraPoint = Integer.parseInt(inputCeraPoint);
+        Assert.notNull(uid, "请确保已经登录游戏或刷新角色");
+        Assert.isTrue(ceraPoint >= 0, "请确保输入的D点数值为非负整数");
+
+        cashCeraPointMapper.update(uid, ceraPoint);
+        DialogUtils.showInfo("数值修改", "成功修改D点数量（重新登录游戏后即可生效）");
+    }
+
+    public void setAvataCoin(Integer uid, String inputAvataCoin) {
+        int avataCoin = Integer.parseInt(inputAvataCoin);
+        Assert.notNull(uid, "请确保已经登录游戏或刷新角色");
+        Assert.isTrue(avataCoin >= 0, "请确保输入的时装代币数量为非负整数");
+
+        memberAvatarCoinMapper.update(uid, avataCoin);
+        DialogUtils.showInfo("数值修改", "成功修改时装代币数量（重新登录游戏后即可生效）");
     }
 }

@@ -8,7 +8,7 @@
       fx:controller="com.garena.dnfmaster.controller.MailPanelController"
       alignment="CENTER_LEFT"
       spacing="30"
-      stylesheets="@../css/Buttons.css,@../css/ComboBoxes.css,@../css/TextFields.css">
+      stylesheets="@../css/Buttons.css,@../css/ComboBoxes.css,@../css/TextFields.css,@../css/CheckBoxes.css">
     <padding>
         <Insets topRightBottomLeft="30"/>
     </padding>
@@ -68,13 +68,13 @@
                      GridPane.columnIndex="0"
                      GridPane.columnSpan="2"/>
 
-        <MFXComboBox fx:id="sealComboBox"
-                     floatingText="封装选项"
-                     prefWidth="200"
-                     prefHeight="50"
+        <MFXCheckbox text="是否红字"
                      GridPane.rowIndex="6"
-                     GridPane.columnIndex="0"
-                     GridPane.columnSpan="2"/>
+                     GridPane.columnIndex="0"/>
+
+        <MFXCheckbox text="是否封装"
+                     GridPane.rowIndex="6"
+                     GridPane.columnIndex="1"/>
 
         <MFXButton minHeight="40.0"
                    minWidth="90.0"
