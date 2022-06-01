@@ -1,11 +1,11 @@
 package com.garena.dnfmaster.service;
 
 import cn.hutool.core.lang.Assert;
+import com.garena.dnfmaster.annotation.DatabaseRequired;
 import com.garena.dnfmaster.constant.MailType;
 import com.garena.dnfmaster.mapper.LetterMapper;
 import com.garena.dnfmaster.mapper.PostalMapper;
 import com.garena.dnfmaster.pojo.Charac;
-import com.garena.dnfmaster.util.DialogUtils;
 import com.garena.dnfmaster.util.ItemUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -20,6 +20,7 @@ public class MailService {
     @Autowired
     private LetterMapper letterMapper;
 
+    @DatabaseRequired
     @Transactional
     public void sendMails(List<Charac> characters, String commaSeperatedItemIds, String inputItemQuantity, String inputGold, String inputUpgrade, String inputSeperateUpgrade, int amplifyOption, boolean sealOption, MailType mailType) {
         Assert.isFalse(characters.isEmpty() || commaSeperatedItemIds.isEmpty(), "请选择至少一个角色和输入至少一种物品之后再进行发送邮件操作");
@@ -53,6 +54,7 @@ public class MailService {
         }
     }
 
+    @DatabaseRequired
     @Transactional
     public void clearMails() {
         postalMapper.deleteAll();

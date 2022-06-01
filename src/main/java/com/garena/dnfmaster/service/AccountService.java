@@ -1,12 +1,12 @@
 package com.garena.dnfmaster.service;
 
 import cn.hutool.core.lang.Assert;
+import com.garena.dnfmaster.annotation.DatabaseRequired;
 import com.garena.dnfmaster.controller.AccountPanelController;
 import com.garena.dnfmaster.mapper.*;
 import com.garena.dnfmaster.pojo.Charac;
 import com.garena.dnfmaster.util.AppContextUtils;
 import com.garena.dnfmaster.util.CommandUtils;
-import com.garena.dnfmaster.util.DialogUtils;
 import com.garena.dnfmaster.util.SecurityUtils;
 import lombok.SneakyThrows;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -42,6 +42,7 @@ public class AccountService {
     @Autowired
     private MemberDungeonMapper memberDungeonMapper;
 
+    @DatabaseRequired
     @SneakyThrows
     public void login(String accountName, String password) {
         Assert.notEmpty(accountName, "账号名不能为空");
@@ -60,6 +61,7 @@ public class AccountService {
 
     @SneakyThrows
     @Transactional
+    @DatabaseRequired
     public void register(String accountName, String password) {
         Assert.notEmpty(accountName, "账号名不能为空");
         Assert.notEmpty(password, "账号密码不能为空");
@@ -81,6 +83,7 @@ public class AccountService {
         Assert.equals(cashCeraPointMapper.insert(uid), 1);
     }
 
+    @DatabaseRequired
     public void changePassword(String accountName, String oldPassword, String newPassword) {
         Assert.notEmpty(accountName, "账号名不能为空");
         Assert.notEmpty(oldPassword, "账号原密码不能为空");
@@ -91,6 +94,7 @@ public class AccountService {
         Assert.equals(accountMapper.setPassword(accountName, newPassword), 1);
     }
 
+    @DatabaseRequired
     public void refreshCharacters(String accountName) {
         Assert.notEmpty(accountName, "账号名不能为空");
 
@@ -108,6 +112,7 @@ public class AccountService {
         accountPanelController.setCharacters(characters);
     }
 
+    @DatabaseRequired
     public void setCera(Integer uid, String inputCera) {
         int cera = Integer.parseInt(inputCera);
         Assert.notNull(uid, "请确保已经登录游戏或刷新角色");
@@ -115,6 +120,7 @@ public class AccountService {
         cashCeraMapper.update(uid, cera);
     }
 
+    @DatabaseRequired
     public void setCeraPoint(Integer uid, String inputCeraPoint) {
         int ceraPoint = Integer.parseInt(inputCeraPoint);
         Assert.notNull(uid, "请确保已经登录游戏或刷新角色");
@@ -122,6 +128,7 @@ public class AccountService {
         cashCeraPointMapper.update(uid, ceraPoint);
     }
 
+    @DatabaseRequired
     public void setAvataCoin(Integer uid, String inputAvataCoin) {
         int avataCoin = Integer.parseInt(inputAvataCoin);
         Assert.notNull(uid, "请确保已经登录游戏或刷新角色");
@@ -129,7 +136,7 @@ public class AccountService {
         memberAvatarCoinMapper.update(uid, avataCoin);
     }
 
-    @Transactional
+    @DatabaseRequired
     public void unlockAllDungeons(Integer uid) {
         Assert.notNull(uid, "请确保已经登录游戏或刷新角色");
         String dungeon = "2|3,3|3,4|3,5|3,6|3,7|3,8|3,9|3,11|3,12|3,13|3,14|3,15|3,17|3,21|3,22|3,23|3,24|3,25|3,26|3,27|3,31|3,32|3,33|3,34|3,35|3,36|3,37|3,40|3,42|3,43|3,44|3,45|3,50|3,51|3,52|3,53|3,60|3,61|3,65|2,66|1,67|2,70|3,71|3,72|3,73|3,74|3,75|3,76|3,77|3,80|3,81|3,82|3,83|3,84|3,85|3,86|3,87|3,88|3,89|3,90|3,91|2,92|3,93|3,100|3,101|3,102|3,103|3,104|3,110|3,111|3,112|3,140|3,141|3,502|3,511|3,521|3,1000|3,1500|3,1501|3,1502|3,1504|1,1506|3,3506|3,10000|3";

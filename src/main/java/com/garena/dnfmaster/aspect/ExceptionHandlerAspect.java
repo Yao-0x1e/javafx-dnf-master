@@ -14,11 +14,6 @@ import org.springframework.core.annotation.Order;
 public class ExceptionHandlerAspect {
     @Pointcut("execution(public * com.garena.dnfmaster.service.*Service.*(..))")
     private void executionPointcut() {
-
-    }
-
-    @Pointcut("@annotation(com.garena.dnfmaster.annotation.ExceptionHandler))")
-    private void annotationPointCut() {
     }
 
     @AfterThrowing(pointcut = "executionPointcut()", throwing = "throwable")

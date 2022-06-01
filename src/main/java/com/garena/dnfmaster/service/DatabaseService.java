@@ -37,4 +37,8 @@ public class DatabaseService {
         dataSource.getConnection().close();
         isConnected = false;
     }
+
+    public boolean isConnected() {
+        return isConnected;
+    }
 }
