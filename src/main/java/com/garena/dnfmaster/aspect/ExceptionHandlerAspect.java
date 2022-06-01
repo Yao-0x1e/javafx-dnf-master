@@ -1,7 +1,6 @@
 package com.garena.dnfmaster.aspect;
 
 import com.garena.dnfmaster.util.DialogUtils;
-import org.aspectj.lang.JoinPoint;
 import org.aspectj.lang.annotation.AfterThrowing;
 import org.aspectj.lang.annotation.Aspect;
 import org.aspectj.lang.annotation.Pointcut;
@@ -17,7 +16,8 @@ public class ExceptionHandlerAspect {
     }
 
     @AfterThrowing(pointcut = "executionPointcut()", throwing = "throwable")
-    public void handleException(JoinPoint joinPoint, Throwable throwable) {
-        DialogUtils.showError("错误", throwable.toString());
+    public void handleException(Throwable throwable) {
+        Throwable cause = throwable.getCause();
+        DialogUtils.showError("错误", cause.toString());
     }
 }

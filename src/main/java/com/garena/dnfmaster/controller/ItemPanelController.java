@@ -190,8 +190,8 @@ public class ItemPanelController implements Initializable {
         if (result != null) {
             boolean isEgg = options[1].equals(result);
             characService.addCreatures(characters, commaSeperatedItemIds, isEgg);
+            List<String> characterNames = characters.stream().map(Charac::getName).collect(Collectors.toList());
+            DialogUtils.showInfo("添加宠物", "宠物成功添加到角色：" + characterNames);
         }
-        List<String> characterNames = characters.stream().map(Charac::getName).collect(Collectors.toList());
-        DialogUtils.showInfo("添加宠物", "宠物成功添加到角色：" + characterNames);
     }
 }
