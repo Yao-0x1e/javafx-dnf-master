@@ -1,7 +1,7 @@
 package com.garena.dnfmaster.service;
 
 import cn.hutool.core.lang.Assert;
-import com.garena.dnfmaster.controller.ManagementPanelController;
+import com.garena.dnfmaster.controller.AccountPanelController;
 import com.garena.dnfmaster.mapper.*;
 import com.garena.dnfmaster.pojo.Charac;
 import com.garena.dnfmaster.util.AppContextUtils;
@@ -106,9 +106,9 @@ public class AccountService {
     }
 
     private void loadCharacters(int uid) {
-        ManagementPanelController managementPanelController = AppContextUtils.getBean(ManagementPanelController.class);
+        AccountPanelController accountPanelController = AppContextUtils.getBean(AccountPanelController.class);
         List<Charac> characters = characInfoMapper.getCharacters(uid);
-        managementPanelController.setCharacters(characters);
+        accountPanelController.setCharacters(characters);
     }
 
     public void setCera(Integer uid, String inputCera) {

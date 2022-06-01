@@ -23,6 +23,7 @@ public class DatabasePanelController {
         databaseService = AppContextUtils.getBean(DatabaseService.class);
     }
 
+
     @SneakyThrows
     public void onConnectButtonClicked() {
         String username = usernameField.getText();

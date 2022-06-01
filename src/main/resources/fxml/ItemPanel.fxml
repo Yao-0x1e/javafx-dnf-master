@@ -1,0 +1,118 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import io.github.palexdev.materialfx.controls.*?>
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.layout.*?>
+<HBox xmlns="http://javafx.com/javafx"
+      xmlns:fx="http://javafx.com/fxml"
+      fx:controller="com.garena.dnfmaster.controller.ItemPanelController"
+      alignment="CENTER_LEFT"
+      spacing="30"
+      stylesheets="@../css/Buttons.css,@../css/ComboBoxes.css,@../css/TextFields.css,@../css/Toggles.css">
+    <padding>
+        <Insets topRightBottomLeft="30"/>
+    </padding>
+    <MFXTableView fx:id="itemTableView"
+                  prefHeight="550.0"
+                  prefWidth="350.0"/>
+
+    <GridPane alignment="TOP_CENTER"
+              styleClass="grid-pane"
+              vgap="20.0"
+              hgap="20.0">
+        <MFXTextField floatingText="物品编号"
+                      fx:id="itemIdTextField"
+                      text="0"
+                      prefWidth="100"
+                      GridPane.rowIndex="0"
+                      GridPane.columnIndex="0"
+                      styleClass="mfx-text-field"/>
+
+        <MFXTextField floatingText="物品数量"
+                      fx:id="itemQuantityTextField"
+                      text="0"
+                      prefWidth="100"
+                      GridPane.rowIndex="0"
+                      GridPane.columnIndex="1"
+                      styleClass="mfx-text-field"/>
+
+
+        <MFXTextField floatingText="强化等级"
+                      fx:id="upgradeTextField"
+                      text="0"
+                      prefWidth="100"
+                      GridPane.rowIndex="1"
+                      GridPane.columnIndex="0"
+                      styleClass="mfx-text-field"/>
+
+        <MFXTextField floatingText="增幅等级"
+                      fx:id="seperateUpgradeTextField"
+                      text="0"
+                      prefWidth="100"
+                      GridPane.rowIndex="1"
+                      GridPane.columnIndex="1"
+                      styleClass="mfx-text-field"/>
+
+        <MFXTextField floatingText="金币数量"
+                      fx:id="goldTextField"
+                      text="0"
+                      prefWidth="100"
+                      GridPane.rowIndex="2"
+                      GridPane.columnIndex="0"
+                      styleClass="mfx-text-field"/>
+
+        <MFXComboBox fx:id="sealComboBox"
+                     floatingText="封装选项"
+                     prefWidth="100"
+                     prefHeight="50"
+                     GridPane.rowIndex="2"
+                     GridPane.columnIndex="1"/>
+
+        <MFXComboBox fx:id="amplifyComboBox"
+                     floatingText="红字属性"
+                     prefWidth="100"
+                     prefHeight="50"
+                     GridPane.rowIndex="3"
+                     GridPane.columnIndex="0"/>
+
+        <MFXComboBox fx:id="mailTypeComboBox"
+                     floatingText="邮件类型"
+                     prefWidth="100"
+                     prefHeight="50"
+                     GridPane.rowIndex="3"
+                     GridPane.columnIndex="1"/>
+
+
+        <MFXButton prefHeight="40.0"
+                   prefWidth="150.0"
+                   styleClass="outline-button"
+                   text="发送邮件"
+                   GridPane.columnIndex="0"
+                   GridPane.rowIndex="4"
+                   onMouseClicked="#onMailSendButtonClicked"/>
+
+        <MFXButton prefHeight="40.0"
+                   prefWidth="150.0"
+                   styleClass="outline-button"
+                   text="清空邮件"
+                   GridPane.columnIndex="1"
+                   GridPane.rowIndex="4"
+                   onMouseClicked="#onMailClearButtonClicked"/>
+
+        <MFXButton prefHeight="40.0"
+                   prefWidth="150.0"
+                   styleClass="outline-button"
+                   text="添加装扮"
+                   GridPane.columnIndex="0"
+                   GridPane.rowIndex="5"
+                   onMouseClicked="#onMailSendButtonClicked"/>
+
+        <MFXButton prefHeight="40.0"
+                   prefWidth="150.0"
+                   styleClass="outline-button"
+                   text="添加宠物"
+                   GridPane.columnIndex="1"
+                   GridPane.rowIndex="5"
+                   onMouseClicked="#onMailClearButtonClicked"/>
+    </GridPane>
+</HBox>

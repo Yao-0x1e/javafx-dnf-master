@@ -1,64 +1,116 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import io.github.palexdev.materialfx.controls.MFXButton?>
-<?import io.github.palexdev.materialfx.controls.MFXPasswordField?>
-<?import io.github.palexdev.materialfx.controls.MFXTextField?>
+<?import io.github.palexdev.materialfx.controls.MFXComboBox?>
+<?import io.github.palexdev.materialfx.controls.MFXTableView?>
 <?import javafx.scene.layout.*?>
-<GridPane xmlns="http://javafx.com/javafx"
-          xmlns:fx="http://javafx.com/fxml"
-          fx:controller="com.garena.dnfmaster.controller.AccountPanelController"
-          alignment="CENTER"
-          hgap="20.0"
-          vgap="20.0"
-          styleClass="grid-pane"
-          stylesheets="@../css/Buttons.css,@../css/TextFields.css">
+<?import javafx.geometry.Insets?>
+<?import io.github.palexdev.materialfx.controls.MFXButton?>
+<HBox xmlns="http://javafx.com/javafx"
+      xmlns:fx="http://javafx.com/fxml"
+      fx:controller="com.garena.dnfmaster.controller.AccountPanelController"
+      alignment="CENTER_LEFT"
+      spacing="30"
+      stylesheets="@../css/Buttons.css,@../css/ComboBoxes.css">
+    <padding>
+        <Insets topRightBottomLeft="30"/>
+    </padding>
+    <MFXTableView fx:id="characTableView"
+                  prefHeight="550.0"
+                  prefWidth="300.0"/>
 
-    <MFXTextField floatingText="用户"
-                  prefWidth="320"
-                  GridPane.rowIndex="0"
-                  GridPane.columnIndex="0"
-                  GridPane.columnSpan="2"
-                  styleClass="mfx-text-field"
-                  fx:id="accountUsernameField"/>
+    <GridPane alignment="TOP_CENTER"
+              styleClass="grid-pane"
+              vgap="20.0"
+              hgap="20.0">
 
-    <MFXPasswordField floatingText="密码"
-                      prefWidth="320"
-                      GridPane.rowIndex="1"
-                      GridPane.columnIndex="0"
-                      GridPane.columnSpan="2"
-                      styleClass="mfx-text-field"
-                      fx:id="accountPasswordField"/>
+        <MFXComboBox fx:id="valueComboBox"
+                     floatingText="数值选项"
+                     prefWidth="200"
+                     prefHeight="45"
+                     GridPane.rowIndex="0"
+                     GridPane.columnIndex="0"/>
 
-    <MFXButton minHeight="30.0"
-               minWidth="150.0"
-               styleClass="outline-button"
-               text="登录游戏"
-               GridPane.columnIndex="0"
-               GridPane.rowIndex="2"
-               onMouseClicked="#onLoginButtonClicked"/>
+        <MFXButton prefWidth="100"
+                   prefHeight="40"
+                   styleClass="outline-button"
+                   text="修改"
+                   GridPane.rowIndex="0"
+                   GridPane.columnIndex="1"
+                   onMouseClicked="#onValueButtonClicked"/>
 
-    <MFXButton minHeight="30.0"
-               minWidth="150.0"
-               styleClass="outline-button"
-               text="刷新角色"
-               GridPane.columnIndex="1"
-               GridPane.rowIndex="2"
-               onMouseClicked="#onCharacterRefreshButtonClicked"/>
+        <MFXComboBox fx:id="growTypeComboBox"
+                     floatingText="主职业选项"
+                     prefWidth="200"
+                     prefHeight="45"
+                     GridPane.rowIndex="1"
+                     GridPane.columnIndex="0"/>
 
-    <MFXButton minHeight="30.0"
-               minWidth="150.0"
-               styleClass="outline-button"
-               text="注册账号"
-               GridPane.columnIndex="0"
-               GridPane.rowIndex="3"
-               onMouseClicked="#onRegisterButtonClicked"/>
+        <MFXButton prefWidth="100"
+                   prefHeight="40"
+                   styleClass="outline-button"
+                   text="转职"
+                   GridPane.rowIndex="1"
+                   GridPane.columnIndex="1"
+                   onMouseClicked="#onGrowTypeButtonClicked"/>
 
-    <MFXButton minHeight="30.0"
-               minWidth="150.0"
-               styleClass="outline-button"
-               text="修改密码"
-               GridPane.columnIndex="1"
-               GridPane.rowIndex="3"
-               onMouseClicked="#onPasswordChangeButtonClicked"/>
-</GridPane>
+        <MFXComboBox fx:id="expertJobComboBox"
+                     floatingText="副职业选项"
+                     prefWidth="200"
+                     prefHeight="45"
+                     GridPane.rowIndex="2"
+                     GridPane.columnIndex="0"/>
 
+        <MFXButton prefWidth="100"
+                   prefHeight="40"
+                   styleClass="outline-button"
+                   text="转职"
+                   GridPane.rowIndex="2"
+                   GridPane.columnIndex="1"
+                   onMouseClicked="#onExpertJobButtonClicked"/>
+
+        <MFXComboBox fx:id="clearComboBox"
+                     floatingText="清理选项"
+                     prefWidth="200"
+                     prefHeight="45"
+                     GridPane.rowIndex="3"
+                     GridPane.columnIndex="0"/>
+
+        <MFXButton prefWidth="100"
+                   prefHeight="40"
+                   styleClass="outline-button"
+                   text="清空"
+                   GridPane.rowIndex="3"
+                   GridPane.columnIndex="1"
+                   onMouseClicked="#onClearButtonClicked"/>
+
+        <MFXComboBox fx:id="eventComboBox"
+                     floatingText="活动选项"
+                     prefWidth="200"
+                     prefHeight="45"
+                     GridPane.rowIndex="4"
+                     GridPane.columnIndex="0"/>
+
+        <MFXButton prefWidth="100"
+                   prefHeight="40"
+                   styleClass="outline-button"
+                   text="开启"
+                   GridPane.rowIndex="4"
+                   GridPane.columnIndex="1"
+                   onMouseClicked="#onEventButtonClicked"/>
+
+        <MFXComboBox fx:id="otherComboBox"
+                     floatingText="其他选项"
+                     prefWidth="200"
+                     prefHeight="45"
+                     GridPane.rowIndex="5"
+                     GridPane.columnIndex="0"/>
+
+        <MFXButton prefWidth="100"
+                   prefHeight="40"
+                   styleClass="outline-button"
+                   text="应用"
+                   GridPane.rowIndex="5"
+                   GridPane.columnIndex="1"
+                   onMouseClicked="#onOtherButtonClicked"/>
+    </GridPane>
+</HBox>

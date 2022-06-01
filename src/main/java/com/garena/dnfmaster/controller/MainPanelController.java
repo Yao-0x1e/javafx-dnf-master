@@ -67,9 +67,9 @@ public class MainPanelController implements Initializable {
     private void initializeLoader() {
         MFXLoader loader = new MFXLoader();
         loader.addView(MFXLoaderBean.of("DatabasePanel", loadURL("/fxml/DatabasePanel.fxml")).setBeanToNodeMapper(() -> createToggle("mfx-table", "数据库配置")).setDefaultRoot(true).get());
-        loader.addView(MFXLoaderBean.of("AccountPanel", loadURL("/fxml/AccountPanel.fxml")).setBeanToNodeMapper(() -> createToggle("mfx-user", "账号配置")).setDefaultRoot(false).get());
-        loader.addView(MFXLoaderBean.of("ManagementPanel", loadURL("/fxml/ManagementPanel.fxml")).setBeanToNodeMapper(() -> createToggle("mfx-toggle-on", "管理员功能")).setDefaultRoot(false).get());
-        loader.addView(MFXLoaderBean.of("MailPanel", loadURL("/fxml/MailPanel.fxml")).setBeanToNodeMapper(() -> createToggle("mfx-message", "邮件功能")).setDefaultRoot(false).get());
+        loader.addView(MFXLoaderBean.of("LoginPanel", loadURL("/fxml/LoginPanel.fxml")).setBeanToNodeMapper(() -> createToggle("mfx-user", "账号配置")).setDefaultRoot(false).get());
+        loader.addView(MFXLoaderBean.of("AccountPanel", loadURL("/fxml/AccountPanel.fxml")).setBeanToNodeMapper(() -> createToggle("mfx-toggle-on", "账号管理")).setDefaultRoot(false).get());
+        loader.addView(MFXLoaderBean.of("ItemPanel", loadURL("/fxml/ItemPanel.fxml")).setBeanToNodeMapper(() -> createToggle("mfx-message", "物品管理")).setDefaultRoot(false).get());
         loader.setOnLoadedAction(beans -> {
             List<ToggleButton> nodes = beans.stream().map(bean -> {
                 ToggleButton toggle = (ToggleButton) bean.getBeanToNodeMapper().get();
