@@ -1,11 +1,12 @@
 package com.garena.dnfmaster.service;
 
 import cn.hutool.core.lang.Assert;
-import com.garena.dnfmaster.util.DialogUtils;
 import lombok.SneakyThrows;
 import org.apache.commons.dbcp2.BasicDataSource;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
+import java.sql.DatabaseMetaData;
 
 @Service
 public class DatabaseService {
@@ -14,7 +15,7 @@ public class DatabaseService {
     private boolean isConnected = false;
 
     @SneakyThrows
-    public void connect(String username, String password, String host, String port) {
+    public DatabaseMetaData connect(String username, String password, String host, String port) {
         Assert.isFalse(isConnected, "请勿重复进行数据库连接操作！");
         Assert.notEmpty(username, "数据库用户不能为空");
         Assert.notEmpty(password, "数据库密码不能为空");
@@ -25,8 +26,8 @@ public class DatabaseService {
         dataSource.setUrl(dataSourceUrl);
         dataSource.setUsername(username);
         dataSource.setPassword(password);
-        DialogUtils.showInfo("数据库操作", "成功连接数据库：" + dataSource.getConnection().getMetaData());
         isConnected = true;
+        return dataSource.getConnection().getMetaData();
     }
 
     @SneakyThrows
@@ -34,7 +35,6 @@ public class DatabaseService {
         Assert.isTrue(isConnected, "当前仍未连接至任何数据库！");
 
         dataSource.getConnection().close();
-        DialogUtils.showInfo("数据库操作", "成功断开数据库");
         isConnected = false;
     }
 }

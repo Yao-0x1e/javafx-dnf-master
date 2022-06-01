@@ -4,6 +4,8 @@ import cn.hutool.core.lang.Assert;
 import com.garena.dnfmaster.constant.MailType;
 import com.garena.dnfmaster.mapper.LetterMapper;
 import com.garena.dnfmaster.mapper.PostalMapper;
+import com.garena.dnfmaster.pojo.Charac;
+import com.garena.dnfmaster.util.DialogUtils;
 import com.garena.dnfmaster.util.ItemUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -19,7 +21,8 @@ public class MailService {
     private LetterMapper letterMapper;
 
     @Transactional
-    public void sendMails(int characNo, String commaSeperatedItemIds, String inputItemQuantity, String inputGold, String inputUpgrade, String inputSeperateUpgrade, int amplifyOption, boolean sealOption, MailType mailType) {
+    public void sendMails(List<Charac> characters, String commaSeperatedItemIds, String inputItemQuantity, String inputGold, String inputUpgrade, String inputSeperateUpgrade, int amplifyOption, boolean sealOption, MailType mailType) {
+        Assert.isFalse(characters.isEmpty() || commaSeperatedItemIds.isEmpty(), "请选择至少一个角色和输入至少一种物品之后再进行发送邮件操作");
         int gold = Integer.parseInt(inputGold);
         Assert.isTrue(gold >= 0, "金币数量必须为非负整数");
         int upgrade = Integer.parseInt(inputUpgrade);
@@ -40,10 +43,13 @@ public class MailService {
         String letterText = "";
         Integer lastLetterId = letterMapper.findMaxLetterId();
         int letterId = lastLetterId == null ? 0 : lastLetterId + 1;
-        for (Integer itemId : itemIds) {
-            letterMapper.insert(letterId, characNo, sender, letterText);
-            postalMapper.insert(sender, characNo, amplifyOption, seperateUpgrade, sealFlag, itemId, itemQuantity, upgrade, gold, letterId, avataFlag, creatureFlag);
-            letterId++;
+        for (Charac charac : characters) {
+            int characNo = charac.getNo();
+            for (Integer itemId : itemIds) {
+                letterMapper.insert(letterId, characNo, sender, letterText);
+                postalMapper.insert(sender, characNo, amplifyOption, seperateUpgrade, sealFlag, itemId, itemQuantity, upgrade, gold, letterId, avataFlag, creatureFlag);
+                letterId++;
+            }
         }
     }
 

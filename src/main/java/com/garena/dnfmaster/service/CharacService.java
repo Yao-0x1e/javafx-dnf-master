@@ -5,6 +5,7 @@ import com.garena.dnfmaster.constant.ExpertJob;
 import com.garena.dnfmaster.constant.GrowType;
 import com.garena.dnfmaster.constant.PvpGrade;
 import com.garena.dnfmaster.mapper.*;
+import com.garena.dnfmaster.pojo.Charac;
 import com.garena.dnfmaster.util.ItemUtils;
 import lombok.SneakyThrows;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -40,53 +41,78 @@ public class CharacService {
     @Autowired
     private CharacStatMapper characStatMapper;
 
-    public void setSP(int characNo, String inputSP) {
+    @Transactional
+    public void setSP(List<Charac> characters, String inputSP) {
         int sp = Integer.parseInt(inputSP);
         Assert.isTrue(sp >= 0, "请确保输入的SP数值为非负整数");
-        skillMapper.setSP(characNo, sp);
+        for (Charac character : characters) {
+            skillMapper.setSP(character.getNo(), sp);
+        }
     }
-
-    public void setTP(int characNo, String inputTP) {
-        int tp = Integer.parseInt(inputTP);
-        Assert.isTrue(tp >= 0, "请确保输入的TP数值为非负整数");
-        skillMapper.setTP(characNo, tp);
-    }
-
-    public void setQP(int characNo, String inputQP) {
-        int qp = Integer.parseInt(inputQP);
-        Assert.isTrue(qp >= 0, "请确保输入的QP数值为非负整数");
-        characQuestShopMapper.setQP(characNo, qp);
-    }
-
-
-    public void setPvpGrade(int characNo, String inputPvpGrade) {
-        int pvpGrade = Integer.parseInt(inputPvpGrade);
-        Assert.checkBetween(pvpGrade, PvpGrade.MIN_VALUE, PvpGrade.MAX_VALUE, "段位不在合法区间内");
-        pvpResultMapper.setPvpGrade(characNo, pvpGrade);
-    }
-
-    public void setPvpPoint(int characNo, String inputPvpPoint) {
-        int pvpPoint = Integer.parseInt(inputPvpPoint);
-        Assert.isTrue(pvpPoint >= 0, "请确保输入的胜点数值为非负整数");
-        pvpResultMapper.setPvpPoint(characNo, pvpPoint);
-    }
-
-    public void setPvpWin(int characNo, String inputPvpWin) {
-        int win = Integer.parseInt(inputPvpWin);
-        Assert.isTrue(win >= 0, "请确保输入的胜场数值为非负整数");
-        pvpResultMapper.setPvpWin(characNo, win);
-    }
-
-    public void setPvpLose(int characNo, String inputPvpLose) {
-        int lose = Integer.parseInt(inputPvpLose);
-        Assert.isTrue(lose >= 0, "请确保输入的败场数值为非负整数");
-        pvpResultMapper.setPvpLose(characNo, lose);
-    }
-
 
     @Transactional
-    public void setGrowType(int characNo, int growType) {
+    public void setTP(List<Charac> characters, String inputTP) {
+        int tp = Integer.parseInt(inputTP);
+        Assert.isTrue(tp >= 0, "请确保输入的TP数值为非负整数");
+        for (Charac character : characters) {
+            skillMapper.setTP(character.getNo(), tp);
+        }
+    }
+
+    @Transactional
+    public void setQP(List<Charac> characters, String inputQP) {
+        int qp = Integer.parseInt(inputQP);
+        Assert.isTrue(qp >= 0, "请确保输入的QP数值为非负整数");
+        for (Charac character : characters) {
+            characQuestShopMapper.setQP(character.getNo(), qp);
+        }
+    }
+
+    @Transactional
+    public void setPvpGrade(List<Charac> characters, String inputPvpGrade) {
+        int pvpGrade = Integer.parseInt(inputPvpGrade);
+        Assert.checkBetween(pvpGrade, PvpGrade.MIN_VALUE, PvpGrade.MAX_VALUE, "段位不在合法区间内");
+        for (Charac character : characters) {
+            pvpResultMapper.setPvpGrade(character.getNo(), pvpGrade);
+        }
+    }
+
+    @Transactional
+    public void setPvpPoint(List<Charac> characters, String inputPvpPoint) {
+        int pvpPoint = Integer.parseInt(inputPvpPoint);
+        Assert.isTrue(pvpPoint >= 0, "请确保输入的胜点数值为非负整数");
+        for (Charac character : characters) {
+            pvpResultMapper.setPvpPoint(character.getNo(), pvpPoint);
+        }
+    }
+
+    @Transactional
+    public void setPvpWin(List<Charac> characters, String inputPvpWin) {
+        int win = Integer.parseInt(inputPvpWin);
+        Assert.isTrue(win >= 0, "请确保输入的胜场数值为非负整数");
+        for (Charac character : characters) {
+            pvpResultMapper.setPvpWin(character.getNo(), win);
+        }
+    }
+
+    @Transactional
+    public void setPvpLose(List<Charac> characters, String inputPvpLose) {
+        int lose = Integer.parseInt(inputPvpLose);
+        Assert.isTrue(lose >= 0, "请确保输入的败场数值为非负整数");
+        for (Charac character : characters) {
+            pvpResultMapper.setPvpLose(character.getNo(), lose);
+        }
+    }
+
+    @Transactional
+    public void setGrowType(List<Charac> characters, int growType) {
         Assert.isTrue((growType >= GrowType.MIN_JOB_VALUE && growType <= GrowType.MAX_JOB_VALUE) || (growType >= GrowType.MIN_AWAKE_VALUE && growType <= GrowType.MAX_AWAKE_VALUE), "主职业的数值不在合法区间内");
+        for (Charac character : characters) {
+            setGrowType(character.getNo(), growType);
+        }
+    }
+
+    private void setGrowType(int characNo, int growType) {
         int job = characInfoMapper.findJob(characNo);
         Assert.isFalse(job == 9 || job == 10, "黑暗骑士和缔造者不支持转职或觉醒");
         Assert.isFalse((job == 6 || job == 8) && (growType == 3 || growType == 4 || growType == 19 || growType == 20), "男法师和盗贼只有两种职业或觉醒");
@@ -95,43 +121,61 @@ public class CharacService {
         guildMemberMapper.setGrowType(characNo, growType);
     }
 
-    public void setExpertJob(int characNo, int expertJob) {
+    @Transactional
+    public void setExpertJob(List<Charac> characters, int expertJob) {
         Assert.isTrue(expertJob >= ExpertJob.MIN_VALUE && expertJob <= ExpertJob.MAX_VALUE, "副职业的数值不在合法区间内");
-        characInfoMapper.setExpertJob(characNo, expertJob);
-    }
-
-    public void setMaxExpertJobLevel(int characNo) {
-        Integer expertJob = characInfoMapper.findExpertJob(characNo);
-        if (expertJob == null || expertJob == 0) {
-            characStatMapper.setMaxExpertJobLevel(characNo);
+        for (Charac character : characters) {
+            characInfoMapper.setExpertJob(character.getNo(), expertJob);
         }
     }
 
-    public void setMaxInvenWeight(int characNo) {
-        characInfoMapper.setMaxInvenWeight(characNo);
-    }
-
-    public void clearInven(int characNo) {
-        inventoryMapper.clearInven(characNo);
-    }
-
-    public void clearCreatures(int characNo) {
-        creatureItemMapper.clearCreatures(characNo);
-    }
-
-    public void clearAvatas(int characNo) {
-        userItemMapper.clearAvatas(characNo);
-    }
-
-    public void clearQuests(int characNo) {
-        newCharacRequestMapper.clearQuests(characNo);
+    @Transactional
+    public void setMaxExpertJobLevel(List<Charac> characters) {
+        for (Charac character : characters) {
+            Integer expertJob = characInfoMapper.findExpertJob(character.getNo());
+            if (expertJob == null || expertJob == 0) {
+                characStatMapper.setMaxExpertJobLevel(character.getNo());
+            }
+        }
     }
 
     @Transactional
-    public void clearAllQuests(int characNo) {
-        newCharacRequestMapper.clearQuests(characNo);
-        Integer job = characInfoMapper.findJob(characNo);
-        Assert.checkBetween(job, 0, 9, "无法识别角色的职业：" + characNo);
+    public void setMaxInvenWeight(List<Charac> characters) {
+        for (Charac character : characters) {
+            characInfoMapper.setMaxInvenWeight(character.getNo());
+        }
+    }
+
+    @Transactional
+    public void clearInven(List<Charac> characters) {
+        for (Charac character : characters) {
+            inventoryMapper.clearInven(character.getNo());
+        }
+    }
+
+    @Transactional
+    public void clearCreatures(List<Charac> characters) {
+        for (Charac character : characters) {
+            creatureItemMapper.clearCreatures(character.getNo());
+        }
+    }
+
+    @Transactional
+    public void clearAvatas(List<Charac> characters) {
+        for (Charac character : characters) {
+            userItemMapper.clearAvatas(character.getNo());
+        }
+    }
+
+    @Transactional
+    public void clearQuests(List<Charac> characters) {
+        for (Charac character : characters) {
+            newCharacRequestMapper.clearQuests(character.getNo());
+        }
+    }
+
+    @Transactional
+    public void clearAllQuests(List<Charac> characters) {
         String[] clearQuests = new String[]{
                 "0x30750000789CEDD8DB72C220100050F8FF9FEE8C6D080BA492943A193DE7C10B8605172460CA4FA5E797944B83EFAA8F174DBC14DFE6BACE16A92ACDE1696C8F72D09BABF24CEBE3FEE4D89F52D25F1AF21CCB5395B4AD17B9CBE9D9BE9DAA548D5A18AD4519FE69E3B7C6993297AB9CE2D05D4CEF41B5970FD6B8C1BEF4E0D7B7AAC1A566A77C1E5D7BA2EEB0E1C92934158FCA234356B37BDB762C8FD7479FDF4CD95D6CBB84951BA0D24879CA4DD172AF5861F7873B8E28B4FE6BA2F66BC51BFC209A33554EE5F4B22E8DF10096FB9DF5D226264EE26D855C8294437713B969A40B70D5A23021647F9EAE3EDBA671D78F7D7EEF27F95C1ED351CE8603D005CF718A0DEB9C3CC13E4FC376D54C8EAB716E4B463D879AF9F171AA656B41946602CD940EE7DB60FDDB3E296FEB45AFFE2F2C866EB73A717D1C7E9774F1D4D77CA370FBBA100EE04359386FA0B90FFF65388C2400EFCA3D0E000000000000000000000000000000000000002EF802C33903C7",
                 "0x30750000789CEDD8D192C2200C4051F2FF3FBD33B5A409499532D1E9EA3D2F6E91062494C23679A9BDAEA2559DC7ADDB1F43BCE62FC5DED3239952711FB923CA496F56C94CEB797FC4F7474B625537CEBEBC9941EBBD9030A657FB262E3313F57B3625E6A5C46927EA327963453F722E8C349FBAC5964F6EFB78B2F20663E9C9D357D560A9D9D92059DD0BF7A60D4F4EA1A978301E4B2E03756BFBE6634B523ACD6F983EDD5DF45D42E506481BD10F198ACA7D628835C1BFB0BFC01778D7448D6BC5173C10C3996A5FD3C379B3A00D3D4BC59D7569131327F1F106D1207AE81E220F8D8400AB8AC2B890F13C6DBEEBD338F4E398DF5A71DFE54ADF3DC758270908C17D8BF93D170F774FC7404C4AA7C6D8E4792C710F0790607EFC1CB36C154479BE32E695B38693F5AF7FA39776D1B3FF0BF3A1C7AD8E5F1FD3DFD2164F7DC32F72AFAF857000F0A358382F38DE76B54366DEA3DB652F5E0975B11C0080FF82771900000000000000000000000000000000000000000000000000000000000BFE00522603E7",
@@ -144,39 +188,46 @@ public class CharacService {
                 "0x30750000789CEDD8096EC320100040EFFF3F5DA9896D16707D944439662A350D310B850D064FB16BDABF64B934B955FDFDA38A37E5B751D6992315A5915EFAD6281BBDB92A8EB4DEEF4FE4FE2C25EDA5699C73F9540CDADC8B68C6F46CDF4E552A662DCDD6A011BEB7F157E31C726CAC62CA5377717837AA3D7DB2FA0DB6A51BDFBE510D0E7534E5A377ED89BADD860FA6D0A178EF62EC3D63AB91F9D75B0FD5878B58D7D16E9ABFE0E42DBB8B7997F088645EF74151150DF79C21BE4FB1FD056FE15189DAAE151FF085A8CE54312DA79771C3980F60F1887B7B3EE5C58EBAC27A005D0EDD55D4F276D10B70D5A03029647B9E2E3E9BD3B8E9C79ADFF35385287E6E2F4DAC8D096882474EB15B8DF679C7998CDB1F86624E772D5F84625330776BF493123E8EFCF83AC5B235204A9540474ABBF9D659FFE64F96B7E5A2573E0BCBA1EBAD4E5E1FBBFFCB74F1D4979BCDF7DE0BE100BE9485F305D4B7E1FF841AD22100783DEE710000000000000000000000000000000000000070C10F29ED03DE",
                 "0x30750000789CEDD8DB8EC220100050E6FF7F7A13774B9942151BD6183DE7C10B9619048A608987CAE34BEAA5C96FD5DB8B43BC92DF465B678BD494467A1ADBA39CB4E6AA98C93E6E4FE4F6D492FED2D4CFB9BC349DB6B522BA3E7DB66D4F556A462D8DD6A21EFECB712F3953E6FA2A4A1EBA8BDD7B52EDE583354ED8979EDC7DAB122E353BE56374ED1375878927A7D0543C1AB71EB29ABDB76DC7727B7DF6F99BA9BB8B6D97B072035493D4A738142DF78A15767F78C71185A3FF9AA8FD5AF10137C4E14C15A59E5ED675633E8045BFB35E9A62E2247EAC1035483D74DF4FD205B86A519814B23F4F379F6DD3B86BC73EBFF7937CD4C772D667C301E882479E62C33AF95476DAC5B33DB6A798A9516F846653B0E55BFD4F091FC7FCF83ACD7AB420CA6102CD940EE7DB60FDDB3EA96FDB45AFFD2F2C873E6E75F2FA38FC2EE5E2A92FA78DF4F375211CC097B270BE818547062309C0A7F21B070000000000000000000000000000000000000017FC00C3B703DE"
         };
-        String clearQuest = clearQuests[job];
+
         String questNotify = "0x00000000000000000000000000000000000000000000000000000000000000000000000000000000";
         String specificSection = "0xA82F0000789CEDD3370A02611445E179D889B1356741B1300710145130A0829B70FF2B1057207AC0E1F1DFAF98EE1433EF4E14C5C60ACFF7F3C7B848E21289CB244E90B802E2F85895BC738DC475123748DC74792AA72C494ED522719BC41D8DC4094B913BA7499C217196C43912E7B5EDAF58977CED1E89FB719DCA061AC9FFD8908C6444E23189271A89133625779E91784EE2058997245E69DB4ED85AA70A816DC8FFBC25F14E0B0B81EDC9480E243E6A6121B01319C999C4172D2C04762523B96924F281DDC9C21E5A98888888888888888878F202ADDA1D05";
         String generalSection = "0xAE100000789CEDD2490E82401484E157C6AB12BD9E5B075C0B720B82A238808243043DC49F34E948EDBF74BA5E99D28999C9DC471978593B82F704E77D15E66974206D1F092E083E117C26F842F095E0D2CB6DAB227FBE117C27B826B821F8E1E59DFB8B9EA4ED17C16F826701C09F6124EEA296DCB923F84BB04D0116C12382C7007B1ACD49610B829704AF080E095EFFDF4850B4216D4704C7046F094E869138CB0F2D2A32EC";
         String despair = "0x981C0000789CEDC13101000000C2A0F54F6D0A3FA000000000000000BE061C980001";
-        newCharacRequestMapper.clearAllQuests(characNo, clearQuest, questNotify);
-        characTitleBookMapper.update(characNo, specificSection, generalSection, despair);
-        characStatMapper.unlockSlots(characNo);
+
+        for (Charac character : characters) {
+            int characNo = character.getNo();
+            newCharacRequestMapper.clearQuests(characNo);
+            Integer job = characInfoMapper.findJob(characNo);
+            Assert.checkBetween(job, 0, 9, "无法识别角色的职业：" + characNo);
+
+            String clearQuest = clearQuests[job];
+            newCharacRequestMapper.clearAllQuests(characNo, clearQuest, questNotify);
+            characTitleBookMapper.update(characNo, specificSection, generalSection, despair);
+            characStatMapper.unlockSlots(characNo);
+        }
+    }
+
+    @Transactional
+    public void setMaxEquipLevel(List<Charac> characters) {
+        for (Charac character : characters) {
+            int characNo = character.getNo();
+            int rows = characManageInfoMapper.setMaxEquipLevel(characNo);
+            if (rows == 0) {
+                characManageInfoMapper.insertMaxEquipLevel(characNo);
+            }
+        }
+    }
+
+    @Transactional
+    public void unlockSlots(List<Charac> characters) {
+        for (Charac character : characters) {
+            characStatMapper.unlockSlots(character.getNo());
+        }
     }
 
 
     @Transactional
-    public void setMaxEquipLevel(int characNo) {
-        int rows = characManageInfoMapper.setMaxEquipLevel(characNo);
-        if (rows == 0) {
-            characManageInfoMapper.insertMaxEquipLevel(characNo);
-        }
-    }
-
-    public void unlockSlots(int characNo) {
-        characStatMapper.unlockSlots(characNo);
-    }
-
-    @Transactional
-    @SneakyThrows
-    public void fillCloneAvatas(int characNo) {
-        Integer job = characInfoMapper.findJob(characNo);
-        Assert.checkBetween(job, 0, 9, "无法识别角色的职业：" + characNo);
-        Integer equipAvataCount = userItemMapper.countEquipAvatas(characNo);
-        if (equipAvataCount != 0) {
-            throw new Exception("角色已经装备其他装扮：" + characNo);
-        }
-
+    public void fillCloneAvatas(List<Charac> characters) {
         int[][] itemIds = new int[][]{
                 {42601, 42603, 42605, 42609, 42611, 42615, 42607, 42613, 601580003},
                 {46601, 46603, 46605, 46609, 46611, 46615, 46607, 46613, 602580003},
@@ -190,6 +241,20 @@ public class CharacService {
                 {42601, 42603, 42605, 42609, 42611, 42615, 42607, 42613, 601580003}
         };
 
+        for (Charac character : characters) {
+            fillCloneAvatas(character.getNo(), itemIds);
+        }
+    }
+
+    @SneakyThrows
+    private void fillCloneAvatas(int characNo, int[][] itemIds) {
+        Integer job = characInfoMapper.findJob(characNo);
+        Assert.checkBetween(job, 0, 9, "无法识别角色的职业：" + characNo);
+        Integer equipAvataCount = userItemMapper.countEquipAvatas(characNo);
+        if (equipAvataCount != 0) {
+            throw new Exception("角色已经装备其他装扮：" + characNo);
+        }
+
         int abilityNo = 0;
         for (int slot = 0; slot < itemIds[job].length; ++slot) {
             int itemId = itemIds[job][slot];
@@ -198,8 +263,16 @@ public class CharacService {
     }
 
     @Transactional
-    public void addAvata(int characNo, String commaSeperatedItemIds) {
+    public void addAvatas(List<Charac> characters, String commaSeperatedItemIds) {
+        Assert.isFalse(characters.isEmpty() || commaSeperatedItemIds.isEmpty(), "请选择至少一个角色和输入至少一种物品之后再进行发送邮件操作");
+
         List<Integer> itemIds = ItemUtils.parseCommaSeperatedItemIds(commaSeperatedItemIds);
+        for (Charac character : characters) {
+            addAvatas(character.getNo(), itemIds);
+        }
+    }
+
+    private void addAvatas(int characNo, List<Integer> itemIds) {
         for (Integer itemId : itemIds) {
             Integer maxSlot = userItemMapper.findMaxAvatarSlot(characNo);
             int nextSlot = maxSlot == null ? 10 : maxSlot + 1;
@@ -208,9 +281,17 @@ public class CharacService {
     }
 
     @Transactional
-    public void addCreature(int characNo, String commaSeperatedItemIds, boolean isEgg) {
+    public void addCreatures(List<Charac> characters, String commaSeperatedItemIds, boolean isEgg) {
+        Assert.isFalse(characters.isEmpty() || commaSeperatedItemIds.isEmpty(), "请选择至少一个角色和输入至少一种物品之后再进行发送邮件操作");
+
         List<Integer> itemIds = ItemUtils.parseCommaSeperatedItemIds(commaSeperatedItemIds);
         int creatureType = isEgg ? 0 : 1;
+        for (Charac character : characters) {
+            addCreatures(character.getNo(), itemIds, creatureType);
+        }
+    }
+
+    private void addCreatures(int characNo, List<Integer> itemIds, int creatureType) {
         for (Integer itemId : itemIds) {
             Integer maxSlot = creatureItemMapper.findMaxCreatureSlot(characNo);
             int nextSlot = maxSlot == null ? 0 : maxSlot + 1;

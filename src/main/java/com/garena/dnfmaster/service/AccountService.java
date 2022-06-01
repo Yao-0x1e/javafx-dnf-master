@@ -79,7 +79,6 @@ public class AccountService {
         Assert.equals(memberAvatarCoinMapper.insert(uid), 1);
         Assert.equals(cashCeraMapper.insert(uid), 1);
         Assert.equals(cashCeraPointMapper.insert(uid), 1);
-        DialogUtils.showInfo("注册结果", "账号注册成功");
     }
 
     public void changePassword(String accountName, String oldPassword, String newPassword) {
@@ -90,7 +89,6 @@ public class AccountService {
         Integer uid = accountMapper.findUidByAccountNameAndPassword(accountName, oldPassword);
         Assert.notNull(uid, "账号不存在或密码错误");
         Assert.equals(accountMapper.setPassword(accountName, newPassword), 1);
-        DialogUtils.showInfo("修改结果", "修改密码成功");
     }
 
     public void refreshCharacters(String accountName) {
@@ -99,7 +97,6 @@ public class AccountService {
         Integer uid = accountMapper.findUidByAccountName(accountName);
         Assert.notNull(uid, "账号不存在");
         loadCharacters(uid);
-        DialogUtils.showInfo("刷新完成", "请到管理员功能面板查看角色列表");
 
         AppContextUtils.putValue("uid", uid);
         AppContextUtils.putValue("accountName", accountName);

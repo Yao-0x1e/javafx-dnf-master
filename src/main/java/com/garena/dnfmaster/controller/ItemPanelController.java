@@ -148,11 +148,6 @@ public class ItemPanelController implements Initializable {
         AccountPanelController accountPanelController = AppContextUtils.getBean(AccountPanelController.class);
         List<Charac> characters = accountPanelController.getSelectedCharacters();
         String commaSeperatedItemIds = itemIdTextField.getText();
-        if (characters.isEmpty() || commaSeperatedItemIds.isEmpty()) {
-            DialogUtils.showWarning("发送邮件", "请选择至少一个角色和输入至少一种物品之后再进行发送邮件操作");
-            return;
-        }
-
         String inputItemQuantity = itemQuantityTextField.getText();
         String inputGold = goldTextField.getText();
         String inputUpgrade = upgradeTextField.getText();
@@ -170,10 +165,8 @@ public class ItemPanelController implements Initializable {
         } else {
             assert false;
         }
-        for (Charac character : characters) {
-            mailService.sendMails(character.getNo(), commaSeperatedItemIds, inputItemQuantity, inputGold, inputUpgrade, inputSeperateUpgrade, amplifyOption, sealOption, mailType);
-        }
 
+        mailService.sendMails(characters, commaSeperatedItemIds, inputItemQuantity, inputGold, inputUpgrade, inputSeperateUpgrade, amplifyOption, sealOption, mailType);
         List<String> characterNames = characters.stream().map(Charac::getName).collect(Collectors.toList());
         DialogUtils.showInfo("发送邮件", "邮件已成功发送到角色邮箱：" + characterNames);
     }
@@ -182,33 +175,23 @@ public class ItemPanelController implements Initializable {
         AccountPanelController accountPanelController = AppContextUtils.getBean(AccountPanelController.class);
         List<Charac> characters = accountPanelController.getSelectedCharacters();
         String commaSeperatedItemIds = itemIdTextField.getText();
-        if (characters.isEmpty() || commaSeperatedItemIds.isEmpty()) {
-            DialogUtils.showWarning("添加装扮", "请选择至少一个角色和输入至少一种物品之后再进行发送邮件操作");
-            return;
-        }
-
-        for (Charac character : characters) {
-            characService.addAvata(character.getNo(), commaSeperatedItemIds);
-        }
+        characService.addAvatas(characters, commaSeperatedItemIds);
+        List<String> characterNames = characters.stream().map(Charac::getName).collect(Collectors.toList());
+        DialogUtils.showInfo("添加装扮", "装扮成功添加到角色：" + characterNames);
     }
 
     public void onCreatureAddButtonClicked() {
         AccountPanelController accountPanelController = AppContextUtils.getBean(AccountPanelController.class);
         List<Charac> characters = accountPanelController.getSelectedCharacters();
         String commaSeperatedItemIds = itemIdTextField.getText();
-        if (characters.isEmpty() || commaSeperatedItemIds.isEmpty()) {
-            DialogUtils.showWarning("添加宠物", "请选择至少一个角色和输入至少一种物品之后再进行发送邮件操作");
-            return;
-        }
 
         String[] options = {"宠物", "宠物蛋"};
         String result = DialogUtils.showChoiceDialog("添加宠物", "请选择宠物物品类型", "类型：", Arrays.asList(options));
         if (result != null) {
             boolean isEgg = options[1].equals(result);
-            for (Charac character : characters) {
-                characService.addCreature(character.getNo(), commaSeperatedItemIds, isEgg);
-            }
+            characService.addCreatures(characters, commaSeperatedItemIds, isEgg);
         }
-
+        List<String> characterNames = characters.stream().map(Charac::getName).collect(Collectors.toList());
+        DialogUtils.showInfo("添加宠物", "宠物成功添加到角色：" + characterNames);
     }
 }

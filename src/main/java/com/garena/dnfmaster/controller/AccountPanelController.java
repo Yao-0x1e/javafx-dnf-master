@@ -121,7 +121,6 @@ public class AccountPanelController implements Initializable {
         return characTableView.getSelectionModel().getSelectedValues();
     }
 
-
     public void onValueButtonClicked() {
         int selectedIndex = valueComboBox.getSelectedIndex();
         Integer uid = AppContextUtils.getValue("uid", Integer.class);
@@ -140,19 +139,19 @@ public class AccountPanelController implements Initializable {
         } else if (selectedIndex == 2) {
             accountService.setAvataCoin(uid, inputValue);
         } else if (selectedIndex == 3) {
-            characters.forEach(charac -> characService.setSP(charac.getNo(), inputValue));
+            characService.setSP(characters, inputValue);
         } else if (selectedIndex == 4) {
-            characters.forEach(charac -> characService.setTP(charac.getNo(), inputValue));
+            characService.setTP(characters, inputValue);
         } else if (selectedIndex == 5) {
-            characters.forEach(charac -> characService.setQP(charac.getNo(), inputValue));
+            characService.setQP(characters, inputValue);
         } else if (selectedIndex == 6) {
-            characters.forEach(charac -> characService.setPvpGrade(charac.getNo(), inputValue));
+            characService.setPvpGrade(characters, inputValue);
         } else if (selectedIndex == 7) {
-            characters.forEach(charac -> characService.setPvpPoint(charac.getNo(), inputValue));
+            characService.setPvpPoint(characters, inputValue);
         } else if (selectedIndex == 8) {
-            characters.forEach(charac -> characService.setPvpWin(charac.getNo(), inputValue));
+            characService.setPvpWin(characters, inputValue);
         } else if (selectedIndex == 9) {
-            characters.forEach(charac -> characService.setPvpLose(charac.getNo(), inputValue));
+            characService.setPvpLose(characters, inputValue);
         } else {
             assert false;
         }
@@ -175,7 +174,7 @@ public class AccountPanelController implements Initializable {
 
         int selectedIndex = growTypeComboBox.getSelectedIndex();
         int job = selectedIndex <= 4 ? selectedIndex : GrowType.MIN_AWAKE_VALUE + (selectedIndex - 5);
-        characters.forEach(charac -> characService.setGrowType(charac.getNo(), job));
+        characService.setGrowType(characters, job);
 
         List<String> characterNames = characters.stream().map(Charac::getName).collect(Collectors.toList());
         DialogUtils.showInfo("修改职业", "角色修改主职业成功：" + characterNames);
@@ -189,7 +188,7 @@ public class AccountPanelController implements Initializable {
         }
 
         int expertJob = expertJobComboBox.getSelectedIndex();
-        characters.forEach(charac -> characService.setExpertJob(charac.getNo(), expertJob));
+        characService.setExpertJob(characters, expertJob);
         List<String> characterNames = characters.stream().map(Charac::getName).collect(Collectors.toList());
         DialogUtils.showInfo("修改职业", "角色修改副职业成功：" + characterNames);
     }
@@ -203,15 +202,15 @@ public class AccountPanelController implements Initializable {
         }
 
         if (selectedIndex == 0) {
-            characters.forEach(charac -> characService.clearQuests(charac.getNo()));
+            characService.clearQuests(characters);
         } else if (selectedIndex == 1) {
-            characters.forEach(charac -> characService.clearAllQuests(charac.getNo()));
+            characService.clearAllQuests(characters);
         } else if (selectedIndex == 2) {
-            characters.forEach(charac -> characService.clearInven(charac.getNo()));
+            characService.clearInven(characters);
         } else if (selectedIndex == 3) {
-            characters.forEach(charac -> characService.clearAvatas(charac.getNo()));
+            characService.clearAvatas(characters);
         } else if (selectedIndex == 4) {
-            characters.forEach(charac -> characService.clearCreatures(charac.getNo()));
+            characService.clearCreatures(characters);
         } else {
             assert false;
         }
@@ -247,15 +246,15 @@ public class AccountPanelController implements Initializable {
             Integer uid = AppContextUtils.getValue("uid", Integer.class);
             accountService.unlockAllDungeons(uid);
         } else if (selectedIndex == 1) {
-            characters.forEach(charac -> characService.setMaxEquipLevel(charac.getNo()));
+            characService.setMaxEquipLevel(characters);
         } else if (selectedIndex == 2) {
-            characters.forEach(charac -> characService.fillCloneAvatas(charac.getNo()));
+            characService.fillCloneAvatas(characters);
         } else if (selectedIndex == 3) {
-            characters.forEach(charac -> characService.unlockSlots(charac.getNo()));
+            characService.unlockSlots(characters);
         } else if (selectedIndex == 4) {
-            characters.forEach(charac -> characService.setMaxExpertJobLevel(charac.getNo()));
+            characService.setMaxExpertJobLevel(characters);
         } else if (selectedIndex == 5) {
-            characters.forEach(charac -> characService.setMaxInvenWeight(charac.getNo()));
+            characService.setMaxInvenWeight(characters);
         } else if (selectedIndex == 6) {
             String guildName = DialogUtils.showInputDialog("修改公会", "请输入公会名称", "名称：");
             if (guildName == null) {
