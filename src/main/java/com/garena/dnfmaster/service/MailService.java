@@ -4,14 +4,12 @@ import cn.hutool.core.lang.Assert;
 import com.garena.dnfmaster.constant.MailType;
 import com.garena.dnfmaster.mapper.LetterMapper;
 import com.garena.dnfmaster.mapper.PostalMapper;
+import com.garena.dnfmaster.util.ItemUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.ArrayList;
-import java.util.HashSet;
 import java.util.List;
-import java.util.Set;
 
 @Service
 public class MailService {
@@ -33,23 +31,19 @@ public class MailService {
         Assert.checkBetween(amplifyOption, 0, 4, "非法红字属性");
         Assert.notNull(mailType, "非法邮件类型");
 
-        String[] inputItemIds = commaSeperatedItemIds.split(",");
-        List<Integer> itemIds = new ArrayList<>(inputItemIds.length);
-        for (String inputItemId : inputItemIds) {
-            int itemId = Integer.parseInt(inputItemId);
-            itemIds.add(itemId);
-            Assert.isTrue(itemId >= 0, "物品编号必须为非负整数");
-        }
-        Set<Integer> set = new HashSet<>(itemIds);
-        Assert.equals(set.size(), itemIds.size(), "请检查是否存在重复的物品编号");
-
+        List<Integer> itemIds = ItemUtils.parseCommaSeperatedItemIds(commaSeperatedItemIds);
         int sealFlag = sealOption ? 1 : 0;
-        int createFlag = mailType.equals(MailType.CREATURE) ? 1 : 0;
+        int creatureFlag = mailType.equals(MailType.CREATURE) ? 1 : 0;
         int avataFlag = mailType.equals(MailType.AVATA) ? 1 : 0;
 
         String sender = "Garena";
+        String letterText = "";
+        Integer lastLetterId = letterMapper.findMaxLetterId();
+        int letterId = lastLetterId == null ? 0 : lastLetterId + 1;
         for (Integer itemId : itemIds) {
-            // postalMapper.insert(sender, characNo,amplifyOption,seperateUpgrade,sealFlag,itemId,)
+            letterMapper.insert(letterId, characNo, sender, letterText);
+            postalMapper.insert(sender, characNo, amplifyOption, seperateUpgrade, sealFlag, itemId, itemQuantity, upgrade, gold, letterId, avataFlag, creatureFlag);
+            letterId++;
         }
     }
 

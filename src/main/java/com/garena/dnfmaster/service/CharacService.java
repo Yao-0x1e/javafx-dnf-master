@@ -5,10 +5,13 @@ import com.garena.dnfmaster.constant.ExpertJob;
 import com.garena.dnfmaster.constant.GrowType;
 import com.garena.dnfmaster.constant.PvpGrade;
 import com.garena.dnfmaster.mapper.*;
+import com.garena.dnfmaster.util.ItemUtils;
 import lombok.SneakyThrows;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
+import java.util.List;
 
 @Service
 public class CharacService {
@@ -151,7 +154,7 @@ public class CharacService {
         characStatMapper.unlockSlots(characNo);
     }
 
-    
+
     @Transactional
     public void setMaxEquipLevel(int characNo) {
         int rows = characManageInfoMapper.setMaxEquipLevel(characNo);
@@ -194,19 +197,25 @@ public class CharacService {
         }
     }
 
-    public void addAvata(int characNo, Integer itemId) {
-        Assert.isTrue(itemId >= 0, "非法装扮物品编号");
-        Integer maxSlot = userItemMapper.findMaxAvatarSlot(characNo);
-        int nextSlot = maxSlot == null ? 10 : maxSlot + 1;
-        userItemMapper.addAvata(characNo, nextSlot, itemId, 0);
+    @Transactional
+    public void addAvata(int characNo, String commaSeperatedItemIds) {
+        List<Integer> itemIds = ItemUtils.parseCommaSeperatedItemIds(commaSeperatedItemIds);
+        for (Integer itemId : itemIds) {
+            Integer maxSlot = userItemMapper.findMaxAvatarSlot(characNo);
+            int nextSlot = maxSlot == null ? 10 : maxSlot + 1;
+            userItemMapper.addAvata(characNo, nextSlot, itemId, 0);
+        }
     }
 
-    public void addCreature(int characNo, Integer itemId, int creatureType) {
-        Assert.isTrue(itemId >= 0, "非法宠物物品编号");
-        Assert.checkBetween(creatureType, 0, 1, "宠物物品类型不正确");
-        Integer maxSlot = creatureItemMapper.findMaxCreatureSlot(characNo);
-        int nextSlot = maxSlot == null ? 0 : maxSlot + 1;
-        creatureItemMapper.addCreature(characNo, nextSlot, itemId, creatureType);
+    @Transactional
+    public void addCreature(int characNo, String commaSeperatedItemIds, boolean isEgg) {
+        List<Integer> itemIds = ItemUtils.parseCommaSeperatedItemIds(commaSeperatedItemIds);
+        int creatureType = isEgg ? 0 : 1;
+        for (Integer itemId : itemIds) {
+            Integer maxSlot = creatureItemMapper.findMaxCreatureSlot(characNo);
+            int nextSlot = maxSlot == null ? 0 : maxSlot + 1;
+            creatureItemMapper.addCreature(characNo, nextSlot, itemId, creatureType);
+        }
     }
 
 }

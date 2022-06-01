@@ -105,7 +105,7 @@
                    text="添加装扮"
                    GridPane.columnIndex="0"
                    GridPane.rowIndex="5"
-                   onMouseClicked="#onMailSendButtonClicked"/>
+                   onMouseClicked="#onAvataAddButtonClicked"/>
 
         <MFXButton prefHeight="40.0"
                    prefWidth="150.0"
@@ -113,6 +113,6 @@
                    text="添加宠物"
                    GridPane.columnIndex="1"
                    GridPane.rowIndex="5"
-                   onMouseClicked="#onMailClearButtonClicked"/>
+                   onMouseClicked="#onCreatureAddButtonClicked"/>
     </GridPane>
 </HBox>

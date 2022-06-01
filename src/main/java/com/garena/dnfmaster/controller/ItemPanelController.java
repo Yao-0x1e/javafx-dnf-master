@@ -3,6 +3,7 @@ package com.garena.dnfmaster.controller;
 import com.garena.dnfmaster.constant.MailType;
 import com.garena.dnfmaster.pojo.Charac;
 import com.garena.dnfmaster.pojo.Item;
+import com.garena.dnfmaster.service.CharacService;
 import com.garena.dnfmaster.service.MailService;
 import com.garena.dnfmaster.util.AppContextUtils;
 import com.garena.dnfmaster.util.DialogUtils;
@@ -56,9 +57,11 @@ public class ItemPanelController implements Initializable {
     private final String[] sealOptions = {"无封装", "有封装"};
 
     private final MailService mailService;
+    private final CharacService characService;
 
     public ItemPanelController() {
         mailService = AppContextUtils.getBean(MailService.class);
+        characService = AppContextUtils.getBean(CharacService.class);
     }
 
     private List<Item> parseItems() throws IOException {
@@ -173,5 +176,39 @@ public class ItemPanelController implements Initializable {
 
         List<String> characterNames = characters.stream().map(Charac::getName).collect(Collectors.toList());
         DialogUtils.showInfo("发送邮件", "邮件已成功发送到角色邮箱：" + characterNames);
+    }
+
+    public void onAvataAddButtonClicked() {
+        AccountPanelController accountPanelController = AppContextUtils.getBean(AccountPanelController.class);
+        List<Charac> characters = accountPanelController.getSelectedCharacters();
+        String commaSeperatedItemIds = itemIdTextField.getText();
+        if (characters.isEmpty() || commaSeperatedItemIds.isEmpty()) {
+            DialogUtils.showWarning("添加装扮", "请选择至少一个角色和输入至少一种物品之后再进行发送邮件操作");
+            return;
+        }
+
+        for (Charac character : characters) {
+            characService.addAvata(character.getNo(), commaSeperatedItemIds);
+        }
+    }
+
+    public void onCreatureAddButtonClicked() {
+        AccountPanelController accountPanelController = AppContextUtils.getBean(AccountPanelController.class);
+        List<Charac> characters = accountPanelController.getSelectedCharacters();
+        String commaSeperatedItemIds = itemIdTextField.getText();
+        if (characters.isEmpty() || commaSeperatedItemIds.isEmpty()) {
+            DialogUtils.showWarning("添加宠物", "请选择至少一个角色和输入至少一种物品之后再进行发送邮件操作");
+            return;
+        }
+
+        String[] options = {"宠物", "宠物蛋"};
+        String result = DialogUtils.showChoiceDialog("添加宠物", "请选择宠物物品类型", "类型：", Arrays.asList(options));
+        if (result != null) {
+            boolean isEgg = options[1].equals(result);
+            for (Charac character : characters) {
+                characService.addCreature(character.getNo(), commaSeperatedItemIds, isEgg);
+            }
+        }
+
     }
 }
