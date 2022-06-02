@@ -14,7 +14,10 @@ import io.github.palexdev.materialfx.controls.MFXTextField;
 import io.github.palexdev.materialfx.controls.cell.MFXTableRowCell;
 import io.github.palexdev.materialfx.filter.IntegerFilter;
 import io.github.palexdev.materialfx.filter.StringFilter;
+import javafx.application.Platform;
+import javafx.collections.FXCollections;
 import javafx.collections.MapChangeListener;
+import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.geometry.Pos;
@@ -23,6 +26,7 @@ import lombok.SneakyThrows;
 import org.apache.commons.io.IOUtils;
 import org.springframework.core.io.ClassPathResource;
 import org.springframework.core.io.Resource;
+import org.springframework.core.task.AsyncTaskExecutor;
 
 import java.io.IOException;
 import java.net.URL;
@@ -64,10 +68,11 @@ public class ItemPanelController implements Initializable {
         characService = AppContextUtils.getBean(CharacService.class);
     }
 
-    private List<Item> parseItems() throws IOException {
+    @SneakyThrows
+    private ObservableList<Item> parseItems() {
         Resource resource = new ClassPathResource("raw/items.txt");
         List<String> lines = IOUtils.readLines(resource.getInputStream(), StandardCharsets.UTF_8);
-        List<Item> items = new ArrayList<>(lines.size());
+        ObservableList<Item> items = FXCollections.observableArrayList();
         for (String line : lines) {
             int commaIndex = line.indexOf(',');
             Item item = new Item();
@@ -97,7 +102,13 @@ public class ItemPanelController implements Initializable {
                 new IntegerFilter<>("编号", Item::getId),
                 new StringFilter<>("名称", Item::getName)
         );
-        itemTableView.getItems().addAll(parseItems());
+
+        // 异步读取物品数据再回到主线程写入
+        AsyncTaskExecutor asyncTaskExecutor = AppContextUtils.getBean(AsyncTaskExecutor.class);
+        asyncTaskExecutor.submit(() -> {
+            ObservableList<Item> items = parseItems();
+            Platform.runLater(() -> itemTableView.setItems(items));
+        });
 
         // 设置事件监听机制，由于鼠标事件失效，需要通过MapChangeListener来实现
         // 参考资料：https://github.com/palexdev/MaterialFX/issues/186
@@ -135,8 +146,8 @@ public class ItemPanelController implements Initializable {
     @SneakyThrows
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
-        setupTable();
         setupComboBoxes();
+        setupTable();
     }
 
     public void onMailClearButtonClicked() {

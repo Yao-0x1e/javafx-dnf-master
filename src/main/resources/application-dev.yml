@@ -4,3 +4,13 @@ spring:
   aop:
     auto: true
     proxy-target-class: true
+
+
+mybatis:
+  configuration:
+    log-impl: org.apache.ibatis.logging.stdout.StdOutImpl
+
+concurrent:
+  max-pool-size: 3
+  core-pool-size: 1
+  thread-name-prefix: async-task-thread-

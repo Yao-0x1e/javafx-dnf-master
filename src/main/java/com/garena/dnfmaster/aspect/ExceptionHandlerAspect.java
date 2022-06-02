@@ -18,6 +18,7 @@ public class ExceptionHandlerAspect {
     @AfterThrowing(pointcut = "executionPointcut()", throwing = "throwable")
     public void handleException(Throwable throwable) {
         Throwable cause = throwable.getCause();
-        DialogUtils.showError("错误", cause.toString());
+        String message = cause == null ? throwable.toString() : cause.toString();
+        DialogUtils.showError("错误", message);
     }
 }
