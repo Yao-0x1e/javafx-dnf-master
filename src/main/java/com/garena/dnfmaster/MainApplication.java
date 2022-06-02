@@ -32,6 +32,7 @@ public class MainApplication extends Application {
         primaryStage.initStyle(StageStyle.TRANSPARENT);
         primaryStage.setScene(scene);
         primaryStage.setTitle("DNF Master");
+        primaryStage.setResizable(false);
         primaryStage.show();
     }
 

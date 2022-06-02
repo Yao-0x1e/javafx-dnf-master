@@ -1,14 +1,26 @@
 package com.garena.dnfmaster.util;
 
+import com.garena.dnfmaster.dialog.WaitingDialog;
 import io.github.palexdev.materialfx.controls.MFXButton;
+import io.github.palexdev.materialfx.controls.MFXProgressBar;
+import io.github.palexdev.materialfx.controls.MFXProgressSpinner;
 import io.github.palexdev.materialfx.dialogs.MFXGenericDialog;
 import io.github.palexdev.materialfx.dialogs.MFXGenericDialogBuilder;
 import io.github.palexdev.materialfx.dialogs.MFXStageDialog;
 import io.github.palexdev.materialfx.enums.ScrimPriority;
 import io.github.palexdev.materialfx.font.MFXFontIcon;
+import javafx.geometry.Pos;
 import javafx.scene.control.*;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
+import javafx.scene.layout.HBox;
+import javafx.scene.layout.StackPane;
+import javafx.scene.layout.VBox;
+import javafx.scene.text.Font;
 import javafx.stage.Modality;
+import javafx.stage.Stage;
 
+import java.io.InputStream;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
@@ -104,5 +116,42 @@ public class DialogUtils {
 
         Optional<String> result = dialog.showAndWait();
         return result.orElse(null);
+    }
+
+    public static WaitingDialog buildAnimationWaitingDialog(Stage owner, String message) {
+        InputStream inputStream = ResourceUtils.loadStream("/pic/waiting.gif");
+        Image waitingImage = new Image(inputStream);
+        ImageView waitingView = new ImageView(waitingImage);
+        waitingView.setFitHeight(owner.getHeight());
+        waitingView.setFitWidth(owner.getWidth());
+
+        Label messageLabel = new Label(message);
+        messageLabel.setFont(Font.font(15));
+
+        StackPane root = new StackPane();
+        root.getChildren().addAll(waitingView, messageLabel);
+        return new WaitingDialog(owner, root);
+    }
+
+    public static WaitingDialog buildProgressBarWaitingDialog(Stage owner, String message) {
+        Label messageLabel = new Label(message);
+        messageLabel.setFont(Font.font(15));
+
+        VBox root = new VBox();
+        root.setAlignment(Pos.CENTER);
+        root.setSpacing(10);
+        root.getChildren().addAll(messageLabel, new MFXProgressBar());
+        return new WaitingDialog(owner, root);
+    }
+
+    public static WaitingDialog buildProgressSpinnerWaitingDialog(Stage owner, String message) {
+        Label messageLabel = new Label(message);
+        messageLabel.setFont(Font.font(15));
+
+        HBox root = new HBox();
+        root.setAlignment(Pos.CENTER);
+        root.setSpacing(20);
+        root.getChildren().addAll(new MFXProgressSpinner(), messageLabel);
+        return new WaitingDialog(owner, root);
     }
 }
