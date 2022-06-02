@@ -10,5 +10,5 @@ public interface CashCeraPointMapper {
     int insert(int uid);
 
     @Update("update taiwan_billing.cash_cera_point set cera_point=#{ceraPoint} where account=#{uid}")
-    int update(int uid, int certPoint);
+    int update(int uid, int ceraPoint);
 }

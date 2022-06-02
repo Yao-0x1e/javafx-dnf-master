@@ -1,9 +1,9 @@
-package com.garena.dnfmaster.registry;
+package com.garena.dnfmaster.common;
 
 import java.util.HashMap;
 import java.util.Map;
 
-public class RuntimeRegistry {
+public class AppRegistry {
     private static final Map<String, Object> hashMap = new HashMap<>();
 
     public static <T> void putValue(String key, T value) {

@@ -1,11 +1,11 @@
 package com.garena.dnfmaster.service;
 
 import cn.hutool.core.lang.Assert;
+import com.garena.dnfmaster.common.AppContext;
+import com.garena.dnfmaster.common.AppRegistry;
 import com.garena.dnfmaster.controller.AccountPanelController;
 import com.garena.dnfmaster.mapper.*;
 import com.garena.dnfmaster.pojo.Charac;
-import com.garena.dnfmaster.registry.RuntimeRegistry;
-import com.garena.dnfmaster.util.AppContextUtils;
 import com.garena.dnfmaster.util.CommandUtils;
 import com.garena.dnfmaster.util.SecurityUtils;
 import lombok.SneakyThrows;
@@ -93,6 +93,7 @@ public class AccountService {
         Assert.equals(accountMapper.setPassword(accountName, newPassword), 1);
     }
 
+
     public void refreshCharacters(String accountName) {
         Assert.notEmpty(accountName, "账号名不能为空");
 
@@ -100,15 +101,16 @@ public class AccountService {
         Assert.notNull(uid, "账号不存在");
         loadCharacters(uid);
 
-        RuntimeRegistry.putValue("uid", uid);
-        RuntimeRegistry.putValue("accountName", accountName);
+        AppRegistry.putValue("uid", uid);
+        AppRegistry.putValue("accountName", accountName);
     }
 
     private void loadCharacters(int uid) {
-        AccountPanelController accountPanelController = AppContextUtils.getBean(AccountPanelController.class);
+        AccountPanelController accountPanelController = AppContext.getBean(AccountPanelController.class);
         List<Charac> characters = characInfoMapper.getCharacters(uid);
         accountPanelController.setCharacters(characters);
     }
+
 
     public void setCera(Integer uid, String inputCera) {
         int cera = Integer.parseInt(inputCera);
@@ -124,12 +126,14 @@ public class AccountService {
         cashCeraPointMapper.update(uid, ceraPoint);
     }
 
+
     public void setAvataCoin(Integer uid, String inputAvataCoin) {
         int avataCoin = Integer.parseInt(inputAvataCoin);
         Assert.notNull(uid, "请确保已经登录游戏或刷新角色");
         Assert.isTrue(avataCoin >= 0, "请确保输入的时装代币数量为非负整数");
         memberAvatarCoinMapper.update(uid, avataCoin);
     }
+
 
     public void unlockAllDungeons(Integer uid) {
         Assert.notNull(uid, "请确保已经登录游戏或刷新角色");

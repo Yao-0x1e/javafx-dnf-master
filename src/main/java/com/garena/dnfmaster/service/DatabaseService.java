@@ -1,8 +1,9 @@
 package com.garena.dnfmaster.service;
 
 import cn.hutool.core.lang.Assert;
-import com.garena.dnfmaster.registry.RuntimeRegistry;
+import com.garena.dnfmaster.common.AppRegistry;
 import lombok.SneakyThrows;
+import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.dbcp2.BasicDataSource;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -10,14 +11,22 @@ import org.springframework.stereotype.Component;
 import java.sql.DatabaseMetaData;
 
 @Component
+@Slf4j
 public class DatabaseService {
     @Autowired
     private BasicDataSource dataSource;
-    private boolean isConnected = false;
+
+    public DatabaseService() {
+        AppRegistry.putValue("isDatabaseConnected", false);
+    }
+
+    private boolean isConnected() {
+        return AppRegistry.getValue("isDatabaseConnected", Boolean.class);
+    }
 
     @SneakyThrows
-    public DatabaseMetaData connect(String username, String password, String host, String port) {
-        Assert.isFalse(isConnected, "请勿重复进行数据库连接操作！");
+    public void connect(String username, String password, String host, String port) {
+        Assert.isFalse(isConnected(), "请勿重复进行数据库连接操作！");
         Assert.notEmpty(username, "数据库用户不能为空");
         Assert.notEmpty(password, "数据库密码不能为空");
         Assert.notEmpty(host, "数据库地址不能为空");
@@ -27,21 +36,17 @@ public class DatabaseService {
         dataSource.setUrl(dataSourceUrl);
         dataSource.setUsername(username);
         dataSource.setPassword(password);
-        isConnected = true;
-        RuntimeRegistry.putValue("isDatabaseConnected", true);
-        return dataSource.getConnection().getMetaData();
+        AppRegistry.putValue("isDatabaseConnected", true);
+
+        DatabaseMetaData databaseMetaData = dataSource.getConnection().getMetaData();
+        log.info(databaseMetaData.toString());
     }
 
     @SneakyThrows
     public void disconnect() {
-        Assert.isTrue(isConnected, "当前仍未连接至任何数据库！");
+        Assert.isTrue(isConnected(), "当前仍未连接至任何数据库！");
 
         dataSource.getConnection().close();
-        isConnected = false;
-        RuntimeRegistry.putValue("isDatabaseConnected", false);
-    }
-
-    public boolean isConnected() {
-        return isConnected;
+        AppRegistry.putValue("isDatabaseConnected", false);
     }
 }

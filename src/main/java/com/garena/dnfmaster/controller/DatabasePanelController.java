@@ -1,14 +1,11 @@
 package com.garena.dnfmaster.controller;
 
+import com.garena.dnfmaster.common.AppContext;
 import com.garena.dnfmaster.service.DatabaseService;
-import com.garena.dnfmaster.util.AppContextUtils;
-import com.garena.dnfmaster.util.DialogUtils;
 import io.github.palexdev.materialfx.controls.MFXPasswordField;
 import io.github.palexdev.materialfx.controls.MFXTextField;
 import javafx.fxml.FXML;
 import lombok.SneakyThrows;
-
-import java.sql.DatabaseMetaData;
 
 public class DatabasePanelController {
     @FXML
@@ -23,23 +20,21 @@ public class DatabasePanelController {
     private final DatabaseService databaseService;
 
     public DatabasePanelController() {
-        databaseService = AppContextUtils.getBean(DatabaseService.class);
+        databaseService = AppContext.getBean(DatabaseService.class);
     }
 
 
     @SneakyThrows
-    public void onConnectButtonClicked() {
+    public synchronized void onConnectButtonClicked() {
         String username = usernameField.getText();
         String password = passwordField.getText();
         String host = hostField.getText();
         String port = portField.getText();
-        DatabaseMetaData databaseMetaData = databaseService.connect(username, password, host, port);
-        DialogUtils.showInfo("数据库操作", "成功连接数据库：" + databaseMetaData);
+        databaseService.connect(username, password, host, port);
     }
 
     @SneakyThrows
-    public void onDisconnectButtonClicked() {
+    public synchronized void onDisconnectButtonClicked() {
         databaseService.disconnect();
-        DialogUtils.showInfo("数据库操作", "成功断开数据库");
     }
 }

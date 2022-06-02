@@ -1,14 +1,14 @@
 package com.garena.dnfmaster.controller;
 
 import cn.hutool.core.lang.Assert;
+import com.garena.dnfmaster.common.AppContext;
+import com.garena.dnfmaster.common.AppRegistry;
 import com.garena.dnfmaster.constant.GrowType;
 import com.garena.dnfmaster.pojo.Charac;
-import com.garena.dnfmaster.registry.RuntimeRegistry;
 import com.garena.dnfmaster.service.AccountService;
 import com.garena.dnfmaster.service.CharacService;
 import com.garena.dnfmaster.service.EventService;
 import com.garena.dnfmaster.service.GuildService;
-import com.garena.dnfmaster.util.AppContextUtils;
 import com.garena.dnfmaster.util.DialogUtils;
 import io.github.palexdev.materialfx.controls.MFXComboBox;
 import io.github.palexdev.materialfx.controls.MFXTableColumn;
@@ -27,7 +27,6 @@ import java.util.Arrays;
 import java.util.Comparator;
 import java.util.List;
 import java.util.ResourceBundle;
-import java.util.stream.Collectors;
 
 public class AccountPanelController implements Initializable {
     private final String[] valueOptions = {"D币", "D点", "时装代币", "普通技能点（SP）", "强化技能点（TP）", "任务技能点（QP）", "段位", "胜点", "胜场", "败场"};
@@ -58,11 +57,11 @@ public class AccountPanelController implements Initializable {
     private final GuildService guildService;
 
     public AccountPanelController() {
-        characService = AppContextUtils.getBean(CharacService.class);
-        accountService = AppContextUtils.getBean(AccountService.class);
-        eventService = AppContextUtils.getBean(EventService.class);
-        guildService = AppContextUtils.getBean(GuildService.class);
-        AppContextUtils.addBean(AccountPanelController.class, this);
+        characService = AppContext.getBean(CharacService.class);
+        accountService = AppContext.getBean(AccountService.class);
+        eventService = AppContext.getBean(EventService.class);
+        guildService = AppContext.getBean(GuildService.class);
+        AppContext.addBean(AccountPanelController.class, this);
     }
 
     @SuppressWarnings("unchecked")
@@ -122,14 +121,10 @@ public class AccountPanelController implements Initializable {
         return characTableView.getSelectionModel().getSelectedValues();
     }
 
-    public void onValueButtonClicked() {
+    public synchronized void onValueButtonClicked() {
         int selectedIndex = valueComboBox.getSelectedIndex();
-        Integer uid = RuntimeRegistry.getValue("uid", Integer.class);
+        Integer uid = AppRegistry.getValue("uid", Integer.class);
         List<Charac> characters = getSelectedCharacters();
-        if (selectedIndex >= 3 && characters.isEmpty()) {
-            DialogUtils.showError("修改数值", "请选定至少一个角色后再进行当前操作");
-            return;
-        }
 
         String inputValue = DialogUtils.showInputDialog("数值修改", "请输入修改后的数值", "数值：");
         Assert.notNull(inputValue);
@@ -156,51 +151,26 @@ public class AccountPanelController implements Initializable {
         } else {
             assert false;
         }
-
-        if (selectedIndex <= 2) {
-            String accountName = RuntimeRegistry.getValue("accountName", String.class);
-            DialogUtils.showInfo("修改数值", "账号数值修改成功：" + accountName);
-        } else {
-            List<String> characterNames = characters.stream().map(Charac::getName).collect(Collectors.toList());
-            DialogUtils.showInfo("修改数值", "角色数值修改成功：" + characterNames);
-        }
     }
 
-    public void onGrowTypeButtonClicked() {
+    public synchronized void onGrowTypeButtonClicked() {
         List<Charac> characters = getSelectedCharacters();
-        if (characters.isEmpty()) {
-            DialogUtils.showError("修改职业", "请选定至少一个角色后再进行当前操作");
-            return;
-        }
 
         int selectedIndex = growTypeComboBox.getSelectedIndex();
         int job = selectedIndex <= 4 ? selectedIndex : GrowType.MIN_AWAKE_VALUE + (selectedIndex - 5);
         characService.setGrowType(characters, job);
-
-        List<String> characterNames = characters.stream().map(Charac::getName).collect(Collectors.toList());
-        DialogUtils.showInfo("修改职业", "角色修改主职业成功：" + characterNames);
     }
 
-    public void onExpertJobButtonClicked() {
+    public synchronized void onExpertJobButtonClicked() {
         List<Charac> characters = getSelectedCharacters();
-        if (characters.isEmpty()) {
-            DialogUtils.showError("修改职业", "请选定至少一个角色后再进行当前操作");
-            return;
-        }
 
         int expertJob = expertJobComboBox.getSelectedIndex();
         characService.setExpertJob(characters, expertJob);
-        List<String> characterNames = characters.stream().map(Charac::getName).collect(Collectors.toList());
-        DialogUtils.showInfo("修改职业", "角色修改副职业成功：" + characterNames);
     }
 
-    public void onClearButtonClicked() {
+    public synchronized void onClearButtonClicked() {
         int selectedIndex = clearComboBox.getSelectedIndex();
         List<Charac> characters = getSelectedCharacters();
-        if (characters.isEmpty()) {
-            DialogUtils.showError("修改职业", "请选定至少一个角色后再进行当前操作");
-            return;
-        }
 
         if (selectedIndex == 0) {
             characService.clearQuests(characters);
@@ -215,12 +185,9 @@ public class AccountPanelController implements Initializable {
         } else {
             assert false;
         }
-
-        List<String> characterNames = characters.stream().map(Charac::getName).collect(Collectors.toList());
-        DialogUtils.showInfo("清理结果", "清理指定选项成功：" + characterNames);
     }
 
-    public void onEventButtonClicked() {
+    public synchronized void onEventButtonClicked() {
         int selectedIndex = eventComboBox.getSelectedIndex();
         if (selectedIndex == 0) {
             eventService.unlimitCharacterCreation();
@@ -231,20 +198,15 @@ public class AccountPanelController implements Initializable {
         } else {
             assert false;
         }
-        DialogUtils.showInfo("活动添加", "开启活动成功：" + eventComboBox.getValue());
     }
 
-    public void onOtherButtonClicked() {
+    public synchronized void onOtherButtonClicked() {
         int selectedIndex = otherComboBox.getSelectedIndex();
 
         List<Charac> characters = getSelectedCharacters();
-        if (selectedIndex != 0 && selectedIndex != 6 && characters.isEmpty()) {
-            DialogUtils.showError("非法操作", "请选定至少一个角色后再进行当前操作");
-            return;
-        }
 
         if (selectedIndex == 0) {
-            Integer uid = RuntimeRegistry.getValue("uid", Integer.class);
+            Integer uid = AppRegistry.getValue("uid", Integer.class);
             accountService.unlockAllDungeons(uid);
         } else if (selectedIndex == 1) {
             characService.setMaxEquipLevel(characters);
@@ -265,7 +227,5 @@ public class AccountPanelController implements Initializable {
         } else {
             assert false;
         }
-
-        DialogUtils.showInfo("其他选项", "执行指定选项的操作成功");
     }
 }

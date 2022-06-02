@@ -21,7 +21,6 @@ public class MailService {
 
     @Transactional
     public void sendMails(List<Charac> characters, String commaSeperatedItemIds, String inputItemQuantity, String inputGold, String inputUpgrade, String inputSeperateUpgrade, int amplifyOption, boolean sealOption, MailType mailType) {
-        Assert.isFalse(characters.isEmpty() || commaSeperatedItemIds.isEmpty(), "请选择至少一个角色和输入至少一种物品之后再进行发送邮件操作");
         int gold = Integer.parseInt(inputGold);
         Assert.isTrue(gold >= 0, "金币数量必须为非负整数");
         int upgrade = Integer.parseInt(inputUpgrade);
@@ -41,12 +40,12 @@ public class MailService {
         String sender = "Garena";
         String letterText = "";
         Integer lastLetterId = letterMapper.findMaxLetterId();
-        int letterId = lastLetterId == null ? 0 : lastLetterId + 1;
+        int letterId = lastLetterId == null ? 1 : lastLetterId + 1;
         for (Charac charac : characters) {
             int characNo = charac.getNo();
             for (Integer itemId : itemIds) {
-                letterMapper.insert(letterId, characNo, sender, letterText);
                 postalMapper.insert(sender, characNo, amplifyOption, seperateUpgrade, sealFlag, itemId, itemQuantity, upgrade, gold, letterId, avataFlag, creatureFlag);
+                letterMapper.insert(letterId, characNo, sender, letterText);
                 letterId++;
             }
         }

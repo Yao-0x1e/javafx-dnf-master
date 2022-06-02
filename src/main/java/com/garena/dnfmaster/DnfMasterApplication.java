@@ -1,6 +1,6 @@
 package com.garena.dnfmaster;
 
-import com.garena.dnfmaster.util.AppContextUtils;
+import com.garena.dnfmaster.common.AppContext;
 import javafx.application.Application;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
@@ -17,7 +17,7 @@ import org.springframework.transaction.annotation.EnableTransactionManagement;
 public class DnfMasterApplication {
     public static void main(String[] args) {
         ConfigurableApplicationContext applicationContext = SpringApplication.run(DnfMasterApplication.class, args);
-        AppContextUtils.setApplicationContext(applicationContext);
+        AppContext.setApplicationContext(applicationContext);
         Application.launch(MainApplication.class, args);
     }
 }

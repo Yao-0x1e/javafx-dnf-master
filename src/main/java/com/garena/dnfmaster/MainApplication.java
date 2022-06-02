@@ -1,7 +1,7 @@
 package com.garena.dnfmaster;
 
 import com.garena.dnfmaster.controller.MainPanelController;
-import com.garena.dnfmaster.util.AppContextUtils;
+import com.garena.dnfmaster.common.AppContext;
 import com.garena.dnfmaster.util.ResourceUtils;
 import fr.brouillard.oss.cssfx.CSSFX;
 import javafx.application.Application;
@@ -16,7 +16,7 @@ import org.springframework.scheduling.concurrent.ThreadPoolTaskExecutor;
 
 public class MainApplication extends Application {
     private void destroyAsyncTaskExecutor() {
-        ThreadPoolTaskExecutor asyncTaskExecutor = (ThreadPoolTaskExecutor) AppContextUtils.getBean(AsyncTaskExecutor.class);
+        ThreadPoolTaskExecutor asyncTaskExecutor = (ThreadPoolTaskExecutor) AppContext.getBean(AsyncTaskExecutor.class);
         asyncTaskExecutor.destroy();
     }
 
@@ -35,7 +35,7 @@ public class MainApplication extends Application {
         primaryStage.setResizable(false);
         primaryStage.show();
 
-        AppContextUtils.addBean(Stage.class, primaryStage);
+        AppContext.addBean(Stage.class, primaryStage);
 
 
     }

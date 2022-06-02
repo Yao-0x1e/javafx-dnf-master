@@ -151,6 +151,7 @@ public class CharacService {
         for (Charac character : characters) {
             inventoryMapper.clearInven(character.getNo());
         }
+
     }
 
     @Transactional
@@ -263,8 +264,6 @@ public class CharacService {
 
     @Transactional
     public void addAvatas(List<Charac> characters, String commaSeperatedItemIds) {
-        Assert.isFalse(characters.isEmpty() || commaSeperatedItemIds.isEmpty(), "请选择至少一个角色和输入至少一种物品之后再进行发送邮件操作");
-
         List<Integer> itemIds = ItemUtils.parseCommaSeperatedItemIds(commaSeperatedItemIds);
         for (Charac character : characters) {
             addAvatas(character.getNo(), itemIds);
@@ -281,8 +280,6 @@ public class CharacService {
 
     @Transactional
     public void addCreatures(List<Charac> characters, String commaSeperatedItemIds, boolean isEgg) {
-        Assert.isFalse(characters.isEmpty() || commaSeperatedItemIds.isEmpty(), "请选择至少一个角色和输入至少一种物品之后再进行发送邮件操作");
-
         List<Integer> itemIds = ItemUtils.parseCommaSeperatedItemIds(commaSeperatedItemIds);
         int creatureType = isEgg ? 0 : 1;
         for (Charac character : characters) {
@@ -297,5 +294,4 @@ public class CharacService {
             creatureItemMapper.addCreature(characNo, nextSlot, itemId, creatureType);
         }
     }
-
 }

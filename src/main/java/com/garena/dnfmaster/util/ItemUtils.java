@@ -8,7 +8,9 @@ import java.util.List;
 import java.util.Set;
 
 public class ItemUtils {
+    // 不允许传入空字符串
     public static List<Integer> parseCommaSeperatedItemIds(String commaSeperatedItemIds) {
+        Assert.isFalse(commaSeperatedItemIds.strip().isEmpty(), "请选择至少一种物品后再进行操作");
         String[] inputItemIds = commaSeperatedItemIds.split(",");
         List<Integer> itemIds = new ArrayList<>(inputItemIds.length);
         for (String inputItemId : inputItemIds) {

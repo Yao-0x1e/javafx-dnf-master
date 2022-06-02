@@ -1,12 +1,9 @@
-package com.garena.dnfmaster.util;
+package com.garena.dnfmaster.common;
 
 import org.springframework.beans.factory.support.DefaultListableBeanFactory;
 import org.springframework.context.ConfigurableApplicationContext;
 
-import java.util.HashMap;
-import java.util.Map;
-
-public class AppContextUtils {
+public class AppContext {
     private static ConfigurableApplicationContext applicationContext;
     private static DefaultListableBeanFactory beanFactory;
 

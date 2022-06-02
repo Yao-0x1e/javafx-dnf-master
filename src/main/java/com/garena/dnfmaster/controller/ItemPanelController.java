@@ -1,11 +1,11 @@
 package com.garena.dnfmaster.controller;
 
+import com.garena.dnfmaster.common.AppContext;
 import com.garena.dnfmaster.constant.MailType;
 import com.garena.dnfmaster.pojo.Charac;
 import com.garena.dnfmaster.pojo.Item;
 import com.garena.dnfmaster.service.CharacService;
 import com.garena.dnfmaster.service.MailService;
-import com.garena.dnfmaster.util.AppContextUtils;
 import com.garena.dnfmaster.util.DialogUtils;
 import io.github.palexdev.materialfx.controls.MFXComboBox;
 import io.github.palexdev.materialfx.controls.MFXTableColumn;
@@ -32,7 +32,6 @@ import java.io.IOException;
 import java.net.URL;
 import java.nio.charset.StandardCharsets;
 import java.util.*;
-import java.util.stream.Collectors;
 
 
 public class ItemPanelController implements Initializable {
@@ -64,8 +63,8 @@ public class ItemPanelController implements Initializable {
     private final CharacService characService;
 
     public ItemPanelController() {
-        mailService = AppContextUtils.getBean(MailService.class);
-        characService = AppContextUtils.getBean(CharacService.class);
+        mailService = AppContext.getBean(MailService.class);
+        characService = AppContext.getBean(CharacService.class);
     }
 
     @SneakyThrows
@@ -104,7 +103,7 @@ public class ItemPanelController implements Initializable {
         );
 
         // 异步读取物品数据再回到主线程写入
-        AsyncTaskExecutor asyncTaskExecutor = AppContextUtils.getBean(AsyncTaskExecutor.class);
+        AsyncTaskExecutor asyncTaskExecutor = AppContext.getBean(AsyncTaskExecutor.class);
         asyncTaskExecutor.submit(() -> {
             ObservableList<Item> items = parseItems();
             Platform.runLater(() -> itemTableView.setItems(items));
@@ -150,13 +149,12 @@ public class ItemPanelController implements Initializable {
         setupTable();
     }
 
-    public void onMailClearButtonClicked() {
+    public synchronized void onMailClearButtonClicked() {
         mailService.clearMails();
-        DialogUtils.showInfo("邮件操作", "已清除服务端所有的邮件记录");
     }
 
-    public void onMailSendButtonClicked() {
-        AccountPanelController accountPanelController = AppContextUtils.getBean(AccountPanelController.class);
+    public synchronized void onMailSendButtonClicked() {
+        AccountPanelController accountPanelController = AppContext.getBean(AccountPanelController.class);
         List<Charac> characters = accountPanelController.getSelectedCharacters();
         String commaSeperatedItemIds = itemIdTextField.getText();
         String inputItemQuantity = itemQuantityTextField.getText();
@@ -178,21 +176,17 @@ public class ItemPanelController implements Initializable {
         }
 
         mailService.sendMails(characters, commaSeperatedItemIds, inputItemQuantity, inputGold, inputUpgrade, inputSeperateUpgrade, amplifyOption, sealOption, mailType);
-        List<String> characterNames = characters.stream().map(Charac::getName).collect(Collectors.toList());
-        DialogUtils.showInfo("发送邮件", "邮件已成功发送到角色邮箱：" + characterNames);
     }
 
-    public void onAvataAddButtonClicked() {
-        AccountPanelController accountPanelController = AppContextUtils.getBean(AccountPanelController.class);
+    public synchronized void onAvataAddButtonClicked() {
+        AccountPanelController accountPanelController = AppContext.getBean(AccountPanelController.class);
         List<Charac> characters = accountPanelController.getSelectedCharacters();
         String commaSeperatedItemIds = itemIdTextField.getText();
         characService.addAvatas(characters, commaSeperatedItemIds);
-        List<String> characterNames = characters.stream().map(Charac::getName).collect(Collectors.toList());
-        DialogUtils.showInfo("添加装扮", "装扮成功添加到角色：" + characterNames);
     }
 
-    public void onCreatureAddButtonClicked() {
-        AccountPanelController accountPanelController = AppContextUtils.getBean(AccountPanelController.class);
+    public synchronized void onCreatureAddButtonClicked() {
+        AccountPanelController accountPanelController = AppContext.getBean(AccountPanelController.class);
         List<Charac> characters = accountPanelController.getSelectedCharacters();
         String commaSeperatedItemIds = itemIdTextField.getText();
 
@@ -201,8 +195,6 @@ public class ItemPanelController implements Initializable {
         if (result != null) {
             boolean isEgg = options[1].equals(result);
             characService.addCreatures(characters, commaSeperatedItemIds, isEgg);
-            List<String> characterNames = characters.stream().map(Charac::getName).collect(Collectors.toList());
-            DialogUtils.showInfo("添加宠物", "宠物成功添加到角色：" + characterNames);
         }
     }
 }
