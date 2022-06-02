@@ -11,6 +11,6 @@ mybatis:
     log-impl: org.apache.ibatis.logging.stdout.StdOutImpl
 
 concurrent:
-  max-pool-size: 1
+  max-pool-size: 2
   core-pool-size: 1
   thread-name-prefix: async-task-thread-

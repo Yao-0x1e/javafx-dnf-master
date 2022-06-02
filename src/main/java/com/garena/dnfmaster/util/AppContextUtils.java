@@ -9,7 +9,6 @@ import java.util.Map;
 public class AppContextUtils {
     private static ConfigurableApplicationContext applicationContext;
     private static DefaultListableBeanFactory beanFactory;
-    private static final Map<String, Object> hashMap = new HashMap<>();
 
     public static void setApplicationContext(ConfigurableApplicationContext context) {
         applicationContext = context;
@@ -24,13 +23,4 @@ public class AppContextUtils {
         return applicationContext.getBean(c);
     }
 
-    public static <T> void putValue(String key, T value) {
-        hashMap.put(key, value);
-    }
-
-    @SuppressWarnings("unchecked")
-    public static <T> T getValue(String key, Class<T> c) {
-        // 如果不存在则返回null
-        return (T) hashMap.get(key);
-    }
 }

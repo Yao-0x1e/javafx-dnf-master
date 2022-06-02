@@ -34,6 +34,10 @@ public class MainApplication extends Application {
         primaryStage.setTitle("DNF Master");
         primaryStage.setResizable(false);
         primaryStage.show();
+
+        AppContextUtils.addBean(Stage.class, primaryStage);
+
+
     }
 
     @Override

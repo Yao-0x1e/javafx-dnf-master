@@ -10,7 +10,7 @@ public class TriggerManager {
     private JdbcTemplate jdbcTemplate;
 
     public void createCharacterCreationTrigger() {
-        jdbcTemplate.execute("use d_taiwan; create trigger limit_create_character_trigger before update on d_taiwan.limit_create_character for each row set NEW.count=0;");
+        jdbcTemplate.execute("use d_taiwan; create trigger limit_create_character_trigger before update on limit_create_character for each row set NEW.count=0;");
     }
 
     public void deleteCharacterCreationTrigger() {

@@ -1,6 +1,5 @@
 package com.garena.dnfmaster.dialog;
 
-import javafx.application.Platform;
 import javafx.scene.Scene;
 import javafx.scene.layout.Background;
 import javafx.scene.layout.BackgroundFill;
@@ -35,10 +34,10 @@ public class WaitingDialog {
     }
 
     public void show() {
-        Platform.runLater(stage::show);
+        stage.show();
     }
 
     public void close() {
-        Platform.runLater(stage::close);
+        stage.close();
     }
 }

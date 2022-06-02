@@ -1,14 +1,15 @@
 package com.garena.dnfmaster.service;
 
 import cn.hutool.core.lang.Assert;
+import com.garena.dnfmaster.registry.RuntimeRegistry;
 import lombok.SneakyThrows;
 import org.apache.commons.dbcp2.BasicDataSource;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
+import org.springframework.stereotype.Component;
 
 import java.sql.DatabaseMetaData;
 
-@Service
+@Component
 public class DatabaseService {
     @Autowired
     private BasicDataSource dataSource;
@@ -27,6 +28,7 @@ public class DatabaseService {
         dataSource.setUsername(username);
         dataSource.setPassword(password);
         isConnected = true;
+        RuntimeRegistry.putValue("isDatabaseConnected", true);
         return dataSource.getConnection().getMetaData();
     }
 
@@ -36,6 +38,7 @@ public class DatabaseService {
 
         dataSource.getConnection().close();
         isConnected = false;
+        RuntimeRegistry.putValue("isDatabaseConnected", false);
     }
 
     public boolean isConnected() {

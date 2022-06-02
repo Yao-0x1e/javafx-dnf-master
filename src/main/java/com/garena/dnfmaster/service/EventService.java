@@ -1,6 +1,5 @@
 package com.garena.dnfmaster.service;
 
-import com.garena.dnfmaster.annotation.DatabaseRequired;
 import com.garena.dnfmaster.database.TriggerManager;
 import com.garena.dnfmaster.mapper.EventLogMapper;
 import lombok.SneakyThrows;
@@ -17,14 +16,12 @@ public class EventService {
     @Autowired
     private EventLogMapper eventLogMapper;
 
-    @DatabaseRequired
     @Transactional
     public void unlimitCharacterCreation() {
         triggerManager.deleteCharacterCreationTrigger();
         triggerManager.createCharacterCreationTrigger();
     }
 
-    @DatabaseRequired
     @SneakyThrows
     public void enableMultipleDrops() {
         List<Integer> eventTypes = eventLogMapper.findAllEventTypes();
@@ -34,7 +31,6 @@ public class EventService {
         eventLogMapper.insert(7, 2000, 0);
     }
 
-    @DatabaseRequired
     @SneakyThrows
     public void unlimitFatiguePoint() {
         List<Integer> eventTypes = eventLogMapper.findAllEventTypes();

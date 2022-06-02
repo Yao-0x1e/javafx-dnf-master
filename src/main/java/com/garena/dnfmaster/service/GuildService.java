@@ -1,7 +1,6 @@
 package com.garena.dnfmaster.service;
 
 import cn.hutool.core.lang.Assert;
-import com.garena.dnfmaster.annotation.DatabaseRequired;
 import com.garena.dnfmaster.mapper.GuildInfoMapper;
 import com.garena.dnfmaster.mapper.GuildSkillMapper;
 import lombok.SneakyThrows;
@@ -16,7 +15,6 @@ public class GuildService {
     @Autowired
     private GuildSkillMapper guildSkillMapper;
 
-    @DatabaseRequired
     @SneakyThrows
     @Transactional
     public void setMaxGuildProperties(String guildName) {

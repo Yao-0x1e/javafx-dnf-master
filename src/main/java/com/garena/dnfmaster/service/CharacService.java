@@ -1,7 +1,6 @@
 package com.garena.dnfmaster.service;
 
 import cn.hutool.core.lang.Assert;
-import com.garena.dnfmaster.annotation.DatabaseRequired;
 import com.garena.dnfmaster.constant.ExpertJob;
 import com.garena.dnfmaster.constant.GrowType;
 import com.garena.dnfmaster.constant.PvpGrade;
@@ -42,7 +41,6 @@ public class CharacService {
     @Autowired
     private CharacStatMapper characStatMapper;
 
-    @DatabaseRequired
     @Transactional
     public void setSP(List<Charac> characters, String inputSP) {
         int sp = Integer.parseInt(inputSP);
@@ -52,7 +50,6 @@ public class CharacService {
         }
     }
 
-    @DatabaseRequired
     @Transactional
     public void setTP(List<Charac> characters, String inputTP) {
         int tp = Integer.parseInt(inputTP);
@@ -62,7 +59,6 @@ public class CharacService {
         }
     }
 
-    @DatabaseRequired
     @Transactional
     public void setQP(List<Charac> characters, String inputQP) {
         int qp = Integer.parseInt(inputQP);
@@ -72,7 +68,6 @@ public class CharacService {
         }
     }
 
-    @DatabaseRequired
     @Transactional
     public void setPvpGrade(List<Charac> characters, String inputPvpGrade) {
         int pvpGrade = Integer.parseInt(inputPvpGrade);
@@ -82,7 +77,6 @@ public class CharacService {
         }
     }
 
-    @DatabaseRequired
     @Transactional
     public void setPvpPoint(List<Charac> characters, String inputPvpPoint) {
         int pvpPoint = Integer.parseInt(inputPvpPoint);
@@ -92,7 +86,6 @@ public class CharacService {
         }
     }
 
-    @DatabaseRequired
     @Transactional
     public void setPvpWin(List<Charac> characters, String inputPvpWin) {
         int win = Integer.parseInt(inputPvpWin);
@@ -102,7 +95,6 @@ public class CharacService {
         }
     }
 
-    @DatabaseRequired
     @Transactional
     public void setPvpLose(List<Charac> characters, String inputPvpLose) {
         int lose = Integer.parseInt(inputPvpLose);
@@ -112,7 +104,6 @@ public class CharacService {
         }
     }
 
-    @DatabaseRequired
     @Transactional
     public void setGrowType(List<Charac> characters, int growType) {
         Assert.isTrue((growType >= GrowType.MIN_JOB_VALUE && growType <= GrowType.MAX_JOB_VALUE) || (growType >= GrowType.MIN_AWAKE_VALUE && growType <= GrowType.MAX_AWAKE_VALUE), "主职业的数值不在合法区间内");
@@ -130,7 +121,6 @@ public class CharacService {
         guildMemberMapper.setGrowType(characNo, growType);
     }
 
-    @DatabaseRequired
     @Transactional
     public void setExpertJob(List<Charac> characters, int expertJob) {
         Assert.isTrue(expertJob >= ExpertJob.MIN_VALUE && expertJob <= ExpertJob.MAX_VALUE, "副职业的数值不在合法区间内");
@@ -139,7 +129,6 @@ public class CharacService {
         }
     }
 
-    @DatabaseRequired
     @Transactional
     public void setMaxExpertJobLevel(List<Charac> characters) {
         for (Charac character : characters) {
@@ -150,7 +139,6 @@ public class CharacService {
         }
     }
 
-    @DatabaseRequired
     @Transactional
     public void setMaxInvenWeight(List<Charac> characters) {
         for (Charac character : characters) {
@@ -158,7 +146,6 @@ public class CharacService {
         }
     }
 
-    @DatabaseRequired
     @Transactional
     public void clearInven(List<Charac> characters) {
         for (Charac character : characters) {
@@ -166,7 +153,6 @@ public class CharacService {
         }
     }
 
-    @DatabaseRequired
     @Transactional
     public void clearCreatures(List<Charac> characters) {
         for (Charac character : characters) {
@@ -174,7 +160,6 @@ public class CharacService {
         }
     }
 
-    @DatabaseRequired
     @Transactional
     public void clearAvatas(List<Charac> characters) {
         for (Charac character : characters) {
@@ -182,7 +167,6 @@ public class CharacService {
         }
     }
 
-    @DatabaseRequired
     @Transactional
     public void clearQuests(List<Charac> characters) {
         for (Charac character : characters) {
@@ -190,7 +174,6 @@ public class CharacService {
         }
     }
 
-    @DatabaseRequired
     @Transactional
     public void clearAllQuests(List<Charac> characters) {
         String[] clearQuests = new String[]{
@@ -224,7 +207,6 @@ public class CharacService {
         }
     }
 
-    @DatabaseRequired
     @Transactional
     public void setMaxEquipLevel(List<Charac> characters) {
         for (Charac character : characters) {
@@ -236,7 +218,6 @@ public class CharacService {
         }
     }
 
-    @DatabaseRequired
     @Transactional
     public void unlockSlots(List<Charac> characters) {
         for (Charac character : characters) {
@@ -244,7 +225,6 @@ public class CharacService {
         }
     }
 
-    @DatabaseRequired
     @Transactional
     public void fillCloneAvatas(List<Charac> characters) {
         int[][] itemIds = new int[][]{
@@ -281,7 +261,6 @@ public class CharacService {
         }
     }
 
-    @DatabaseRequired
     @Transactional
     public void addAvatas(List<Charac> characters, String commaSeperatedItemIds) {
         Assert.isFalse(characters.isEmpty() || commaSeperatedItemIds.isEmpty(), "请选择至少一个角色和输入至少一种物品之后再进行发送邮件操作");
@@ -300,7 +279,6 @@ public class CharacService {
         }
     }
 
-    @DatabaseRequired
     @Transactional
     public void addCreatures(List<Charac> characters, String commaSeperatedItemIds, boolean isEgg) {
         Assert.isFalse(characters.isEmpty() || commaSeperatedItemIds.isEmpty(), "请选择至少一个角色和输入至少一种物品之后再进行发送邮件操作");

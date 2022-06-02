@@ -3,6 +3,7 @@ package com.garena.dnfmaster.controller;
 import cn.hutool.core.lang.Assert;
 import com.garena.dnfmaster.constant.GrowType;
 import com.garena.dnfmaster.pojo.Charac;
+import com.garena.dnfmaster.registry.RuntimeRegistry;
 import com.garena.dnfmaster.service.AccountService;
 import com.garena.dnfmaster.service.CharacService;
 import com.garena.dnfmaster.service.EventService;
@@ -123,7 +124,7 @@ public class AccountPanelController implements Initializable {
 
     public void onValueButtonClicked() {
         int selectedIndex = valueComboBox.getSelectedIndex();
-        Integer uid = AppContextUtils.getValue("uid", Integer.class);
+        Integer uid = RuntimeRegistry.getValue("uid", Integer.class);
         List<Charac> characters = getSelectedCharacters();
         if (selectedIndex >= 3 && characters.isEmpty()) {
             DialogUtils.showError("修改数值", "请选定至少一个角色后再进行当前操作");
@@ -157,7 +158,7 @@ public class AccountPanelController implements Initializable {
         }
 
         if (selectedIndex <= 2) {
-            String accountName = AppContextUtils.getValue("accountName", String.class);
+            String accountName = RuntimeRegistry.getValue("accountName", String.class);
             DialogUtils.showInfo("修改数值", "账号数值修改成功：" + accountName);
         } else {
             List<String> characterNames = characters.stream().map(Charac::getName).collect(Collectors.toList());
@@ -243,7 +244,7 @@ public class AccountPanelController implements Initializable {
         }
 
         if (selectedIndex == 0) {
-            Integer uid = AppContextUtils.getValue("uid", Integer.class);
+            Integer uid = RuntimeRegistry.getValue("uid", Integer.class);
             accountService.unlockAllDungeons(uid);
         } else if (selectedIndex == 1) {
             characService.setMaxEquipLevel(characters);
