@@ -7,11 +7,17 @@
 5. 将编译后生成的`target`目录中的`dnf-master-0.0.1.jar`复制到DNF.exe的目录下
 6. 双击`Start.bat`启动工具
 
+也可以安装Java环境后到以下地址下载压缩包并解压缩到DNF.exe目录后运行。
+
+链接: https://pan.baidu.com/s/1Eoiabgaf-kjXrTYKxXWVCg 提取码: t6bu
+
+
+
 本项目的所有修改均基于原版台服的数据，如有其他需求请自行修改源码。
 
 
 
-相关地址
+相关下载页面
 
 https://www.oracle.com/java/technologies/javase/jdk11-archive-downloads.html
 
