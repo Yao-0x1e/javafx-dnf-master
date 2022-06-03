@@ -36,10 +36,10 @@ public class DatabaseService {
         dataSource.setUrl(dataSourceUrl);
         dataSource.setUsername(username);
         dataSource.setPassword(password);
-        AppRegistry.putValue("isDatabaseConnected", true);
-
+        
         DatabaseMetaData databaseMetaData = dataSource.getConnection().getMetaData();
         log.info(databaseMetaData.toString());
+        AppRegistry.putValue("isDatabaseConnected", true);
     }
 
     @SneakyThrows

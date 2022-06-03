@@ -29,7 +29,8 @@
                       styleClass="mfx-text-field"
                       fx:id="accountPasswordField"/>
 
-    <MFXButton minHeight="30.0"
+    <MFXButton fx:id="loginButton"
+               minHeight="30.0"
                minWidth="150.0"
                styleClass="outline-button"
                text="登录游戏"
@@ -37,7 +38,8 @@
                GridPane.rowIndex="2"
                onMouseClicked="#onLoginButtonClicked"/>
 
-    <MFXButton minHeight="30.0"
+    <MFXButton fx:id="characterRefreshButton"
+               minHeight="30.0"
                minWidth="150.0"
                styleClass="outline-button"
                text="刷新角色"

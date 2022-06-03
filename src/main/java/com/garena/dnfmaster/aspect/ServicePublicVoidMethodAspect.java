@@ -2,9 +2,10 @@ package com.garena.dnfmaster.aspect;
 
 import com.garena.dnfmaster.common.AppContext;
 import com.garena.dnfmaster.common.AppRegistry;
+import com.garena.dnfmaster.dialog.DialogBuilder;
+import com.garena.dnfmaster.dialog.NotificationDialog;
 import com.garena.dnfmaster.dialog.WaitingDialog;
 import com.garena.dnfmaster.service.DatabaseService;
-import com.garena.dnfmaster.util.DialogUtils;
 import javafx.application.Platform;
 import javafx.stage.Stage;
 import org.aspectj.lang.ProceedingJoinPoint;
@@ -38,14 +39,28 @@ public class ServicePublicVoidMethodAspect {
 
     private final ReentrantLock reentrantLock = new ReentrantLock();
     private WaitingDialog waitingDialog = null;
+    // private GenericDialog infoDialog = null;
+    // private GenericDialog errorDialog = null;
+    // private GenericDialog warningDialog = null;
+    private NotificationDialog infoDialog = null;
+    private NotificationDialog errorDialog = null;
+    private NotificationDialog warningDialog = null;
 
-    private void initWaitingDialog() {
+    private void initDialogs() {
         Stage primaryStage = AppContext.getBean(Stage.class);
-        waitingDialog = DialogUtils.buildProgressBarWaitingDialog(primaryStage, "请耐心等待操作执行完成...");
+        waitingDialog = DialogBuilder.buildProgressBarWaitingDialog(primaryStage, "请耐心等待操作执行完成...");
+
+        // infoDialog = DialogBuilder.buildInfoGenericDialog(primaryStage, "", "");
+        // errorDialog = DialogBuilder.buildErrorGenericDialog(primaryStage, "", "");
+        // warningDialog = DialogBuilder.buildWarningGenericDialog(primaryStage, "", "");
+
+        infoDialog = DialogBuilder.buildInfoNotificationDialog("", "");
+        errorDialog = DialogBuilder.buildErrorNotificationDialog("", "");
+        warningDialog = DialogBuilder.buildWarningNotificationDialog("", "");
     }
 
     private boolean isMethodAllowed(ProceedingJoinPoint proceedingJoinPoint) {
-        String targetClassName = proceedingJoinPoint.getTarget().getClass().getName();
+        Class<?> targetClass = proceedingJoinPoint.getTarget().getClass();
         MethodSignature methodSignature = (MethodSignature) proceedingJoinPoint.getSignature();
         Method method = methodSignature.getMethod();
 
@@ -55,7 +70,7 @@ public class ServicePublicVoidMethodAspect {
             // 数据库未连接的情况
             // 判断是否为数据库连接函数，如果是则放行
             String targetMethodName = method.getName();
-            return DatabaseService.class.getName().equals(targetClassName) && "connect".equals(targetMethodName);
+            return DatabaseService.class.equals(targetClass) && "connect".equals(targetMethodName);
         }
         return true;
     }
@@ -63,10 +78,10 @@ public class ServicePublicVoidMethodAspect {
     @Around(value = "executionPointcut()")
     public Object around(ProceedingJoinPoint proceedingJoinPoint) {
         if (waitingDialog == null) {
-            initWaitingDialog();
+            initDialogs();
         }
         if (!isMethodAllowed(proceedingJoinPoint)) {
-            DialogUtils.showWarning("非法操作", "请连接数据库后在进行操作！");
+            warningDialog.show("非法操作", "请连接数据库后在进行操作！");
             return null;
         }
 
@@ -77,14 +92,14 @@ public class ServicePublicVoidMethodAspect {
                 proceedingJoinPoint.proceed();
                 Platform.runLater(() -> {
                     waitingDialog.close();
-                    DialogUtils.showInfo("消息", "成功执行目标操作");
+                    infoDialog.show("消息", "成功执行目标操作");
                 });
             } catch (Throwable throwable) {
                 Throwable cause = throwable.getCause();
                 String message = cause == null ? throwable.toString() : cause.toString();
                 Platform.runLater(() -> {
                     waitingDialog.close();
-                    DialogUtils.showError("错误", message);
+                    errorDialog.show("错误", message);
                 });
             } finally {
                 reentrantLock.unlock();

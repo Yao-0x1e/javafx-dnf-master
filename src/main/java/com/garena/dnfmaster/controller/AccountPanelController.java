@@ -1,25 +1,28 @@
 package com.garena.dnfmaster.controller;
 
-import cn.hutool.core.lang.Assert;
 import com.garena.dnfmaster.common.AppContext;
 import com.garena.dnfmaster.common.AppRegistry;
 import com.garena.dnfmaster.constant.GrowType;
+import com.garena.dnfmaster.dialog.DialogBuilder;
 import com.garena.dnfmaster.pojo.Charac;
 import com.garena.dnfmaster.service.AccountService;
 import com.garena.dnfmaster.service.CharacService;
 import com.garena.dnfmaster.service.EventService;
 import com.garena.dnfmaster.service.GuildService;
-import com.garena.dnfmaster.util.DialogUtils;
 import io.github.palexdev.materialfx.controls.MFXComboBox;
 import io.github.palexdev.materialfx.controls.MFXTableColumn;
 import io.github.palexdev.materialfx.controls.MFXTableView;
 import io.github.palexdev.materialfx.controls.cell.MFXTableRowCell;
 import io.github.palexdev.materialfx.filter.IntegerFilter;
 import io.github.palexdev.materialfx.filter.StringFilter;
+import javafx.application.Platform;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.geometry.Pos;
+import javafx.scene.control.TextInputDialog;
+import javafx.scene.control.Tooltip;
+import javafx.stage.Stage;
 import javafx.util.Pair;
 
 import java.net.URL;
@@ -56,12 +59,15 @@ public class AccountPanelController implements Initializable {
     private final EventService eventService;
     private final GuildService guildService;
 
+    private TextInputDialog valueInputDialog;
+    private TextInputDialog guildNameInputDialog;
+
     public AccountPanelController() {
+        AppContext.addBean(AccountPanelController.class, this);
         characService = AppContext.getBean(CharacService.class);
         accountService = AppContext.getBean(AccountService.class);
         eventService = AppContext.getBean(EventService.class);
         guildService = AppContext.getBean(GuildService.class);
-        AppContext.addBean(AccountPanelController.class, this);
     }
 
     @SuppressWarnings("unchecked")
@@ -85,6 +91,17 @@ public class AccountPanelController implements Initializable {
         );
         characTableView.autosizeColumnsOnInitialization();
         characTableView.getSelectionModel().setAllowsMultipleSelection(true);
+
+        Tooltip tooltip = new Tooltip("请通过鼠标点击选择列表中的单个角色，或者按住Ctrl再使用鼠标点击选择列表中的多个角色。");
+        characTableView.setTooltip(tooltip);
+    }
+
+    private void setupDialogs() {
+        Stage primaryStage = AppContext.getBean(Stage.class);
+        Platform.runLater(() -> {
+            valueInputDialog = DialogBuilder.buildTextInputDialog(primaryStage, "数值修改", "请输入修改后的数值", "数值：");
+            guildNameInputDialog = DialogBuilder.buildTextInputDialog(primaryStage, "修改公会", "请输入公会名称", "名称：");
+        });
     }
 
     private void setupComboBoxes() {
@@ -109,6 +126,7 @@ public class AccountPanelController implements Initializable {
     public void initialize(URL url, ResourceBundle resourceBundle) {
         setupTable();
         setupComboBoxes();
+        setupDialogs();
     }
 
     public void setCharacters(List<Charac> characters) {
@@ -126,31 +144,31 @@ public class AccountPanelController implements Initializable {
         Integer uid = AppRegistry.getValue("uid", Integer.class);
         List<Charac> characters = getSelectedCharacters();
 
-        String inputValue = DialogUtils.showInputDialog("数值修改", "请输入修改后的数值", "数值：");
-        Assert.notNull(inputValue);
-        if (selectedIndex == 0) {
-            accountService.setCera(uid, inputValue);
-        } else if (selectedIndex == 1) {
-            accountService.setCeraPoint(uid, inputValue);
-        } else if (selectedIndex == 2) {
-            accountService.setAvataCoin(uid, inputValue);
-        } else if (selectedIndex == 3) {
-            characService.setSP(characters, inputValue);
-        } else if (selectedIndex == 4) {
-            characService.setTP(characters, inputValue);
-        } else if (selectedIndex == 5) {
-            characService.setQP(characters, inputValue);
-        } else if (selectedIndex == 6) {
-            characService.setPvpGrade(characters, inputValue);
-        } else if (selectedIndex == 7) {
-            characService.setPvpPoint(characters, inputValue);
-        } else if (selectedIndex == 8) {
-            characService.setPvpWin(characters, inputValue);
-        } else if (selectedIndex == 9) {
-            characService.setPvpLose(characters, inputValue);
-        } else {
-            assert false;
-        }
+        valueInputDialog.showAndWait().ifPresent(inputValue -> {
+            if (selectedIndex == 0) {
+                accountService.setCera(uid, inputValue);
+            } else if (selectedIndex == 1) {
+                accountService.setCeraPoint(uid, inputValue);
+            } else if (selectedIndex == 2) {
+                accountService.setAvataCoin(uid, inputValue);
+            } else if (selectedIndex == 3) {
+                characService.setSP(characters, inputValue);
+            } else if (selectedIndex == 4) {
+                characService.setTP(characters, inputValue);
+            } else if (selectedIndex == 5) {
+                characService.setQP(characters, inputValue);
+            } else if (selectedIndex == 6) {
+                characService.setPvpGrade(characters, inputValue);
+            } else if (selectedIndex == 7) {
+                characService.setPvpPoint(characters, inputValue);
+            } else if (selectedIndex == 8) {
+                characService.setPvpWin(characters, inputValue);
+            } else if (selectedIndex == 9) {
+                characService.setPvpLose(characters, inputValue);
+            } else {
+                assert false;
+            }
+        });
     }
 
     public synchronized void onGrowTypeButtonClicked() {
@@ -204,7 +222,6 @@ public class AccountPanelController implements Initializable {
         int selectedIndex = otherComboBox.getSelectedIndex();
 
         List<Charac> characters = getSelectedCharacters();
-
         if (selectedIndex == 0) {
             Integer uid = AppRegistry.getValue("uid", Integer.class);
             accountService.unlockAllDungeons(uid);
@@ -219,11 +236,7 @@ public class AccountPanelController implements Initializable {
         } else if (selectedIndex == 5) {
             characService.setMaxInvenWeight(characters);
         } else if (selectedIndex == 6) {
-            String guildName = DialogUtils.showInputDialog("修改公会", "请输入公会名称", "名称：");
-            if (guildName == null) {
-                return;
-            }
-            guildService.setMaxGuildProperties(guildName);
+            guildNameInputDialog.showAndWait().ifPresent(guildService::setMaxGuildProperties);
         } else {
             assert false;
         }

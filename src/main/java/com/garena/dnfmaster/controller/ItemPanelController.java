@@ -2,11 +2,11 @@ package com.garena.dnfmaster.controller;
 
 import com.garena.dnfmaster.common.AppContext;
 import com.garena.dnfmaster.constant.MailType;
+import com.garena.dnfmaster.dialog.DialogBuilder;
 import com.garena.dnfmaster.pojo.Charac;
 import com.garena.dnfmaster.pojo.Item;
 import com.garena.dnfmaster.service.CharacService;
 import com.garena.dnfmaster.service.MailService;
-import com.garena.dnfmaster.util.DialogUtils;
 import io.github.palexdev.materialfx.controls.MFXComboBox;
 import io.github.palexdev.materialfx.controls.MFXTableColumn;
 import io.github.palexdev.materialfx.controls.MFXTableView;
@@ -21,6 +21,10 @@ import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.geometry.Pos;
+import javafx.scene.control.Alert;
+import javafx.scene.control.ButtonType;
+import javafx.scene.control.Tooltip;
+import javafx.stage.Stage;
 import javafx.util.Pair;
 import lombok.SneakyThrows;
 import org.apache.commons.io.IOUtils;
@@ -62,10 +66,13 @@ public class ItemPanelController implements Initializable {
     private final MailService mailService;
     private final CharacService characService;
 
+    private Alert creatureTypeAlert;
+
     public ItemPanelController() {
         mailService = AppContext.getBean(MailService.class);
         characService = AppContext.getBean(CharacService.class);
     }
+
 
     @SneakyThrows
     private ObservableList<Item> parseItems() {
@@ -113,6 +120,10 @@ public class ItemPanelController implements Initializable {
         // 参考资料：https://github.com/palexdev/MaterialFX/issues/186
         MapChangeListener<Integer, Item> selectionListener = change -> updateItemIdTextField();
         itemTableView.getSelectionModel().selectionProperty().addListener(selectionListener);
+
+        Tooltip tooltip = new Tooltip("请通过鼠标点击选择列表中的单个物品，或者按住Ctrl再使用鼠标点击选择列表中的多个物品。" +
+                "最终发送的物品以物品编号输入框中的数值为准，如果列表中没有相应编号的物品可以尝试手动输入。操作前请先在账号管理面板中选择目标角色。");
+        itemTableView.setTooltip(tooltip);
     }
 
     private void setupComboBoxes() {
@@ -128,6 +139,13 @@ public class ItemPanelController implements Initializable {
             comboBox.getItems().addAll(options);
             comboBox.getSelectionModel().selectItem(options[0]);
         });
+    }
+
+    private void setupDialogs() {
+        Stage primaryStage = AppContext.getBean(Stage.class);
+        String creatureTypeQuestion = "你要添加的是否为宠物蛋？";
+        String creatureTypeWarning = "选择错误将导致物品被加入到错误的位置且无法使用！";
+        Platform.runLater(() -> creatureTypeAlert = DialogBuilder.buildYesOrNoDialog(primaryStage, "添加宠物", creatureTypeQuestion, creatureTypeWarning));
     }
 
     private void updateItemIdTextField() {
@@ -147,6 +165,7 @@ public class ItemPanelController implements Initializable {
     public void initialize(URL url, ResourceBundle resourceBundle) {
         setupComboBoxes();
         setupTable();
+        setupDialogs();
     }
 
     public synchronized void onMailClearButtonClicked() {
@@ -190,11 +209,12 @@ public class ItemPanelController implements Initializable {
         List<Charac> characters = accountPanelController.getSelectedCharacters();
         String commaSeperatedItemIds = itemIdTextField.getText();
 
-        String[] options = {"宠物", "宠物蛋"};
-        String result = DialogUtils.showChoiceDialog("添加宠物", "请选择宠物物品类型", "类型：", Arrays.asList(options));
-        if (result != null) {
-            boolean isEgg = options[1].equals(result);
-            characService.addCreatures(characters, commaSeperatedItemIds, isEgg);
-        }
+        creatureTypeAlert.showAndWait().ifPresent(buttonType -> {
+            if (buttonType == ButtonType.YES) {
+                characService.addCreatures(characters, commaSeperatedItemIds, true);
+            } else if (buttonType == ButtonType.NO) {
+                characService.addCreatures(characters, commaSeperatedItemIds, false);
+            }
+        });
     }
 }

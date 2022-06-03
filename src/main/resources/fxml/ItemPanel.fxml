@@ -8,7 +8,7 @@
       fx:controller="com.garena.dnfmaster.controller.ItemPanelController"
       alignment="CENTER_LEFT"
       spacing="30"
-      stylesheets="@../css/Buttons.css,@../css/ComboBoxes.css,@../css/TextFields.css,@../css/Toggles.css">
+      stylesheets="@../css/Buttons.css,@../css/ComboBoxes.css,@../css/TextFields.css">
     <padding>
         <Insets topRightBottomLeft="30"/>
     </padding>
