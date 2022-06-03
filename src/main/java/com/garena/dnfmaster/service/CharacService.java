@@ -15,6 +15,7 @@ import org.springframework.transaction.annotation.Transactional;
 import java.util.List;
 
 @Service
+@Transactional
 public class CharacService {
     @Autowired
     private SkillMapper skillMapper;
@@ -41,7 +42,6 @@ public class CharacService {
     @Autowired
     private CharacStatMapper characStatMapper;
 
-    @Transactional
     public void setSP(List<Charac> characters, String inputSP) {
         int sp = Integer.parseInt(inputSP);
         Assert.isTrue(sp >= 0, "请确保输入的SP数值为非负整数");
@@ -50,7 +50,6 @@ public class CharacService {
         }
     }
 
-    @Transactional
     public void setTP(List<Charac> characters, String inputTP) {
         int tp = Integer.parseInt(inputTP);
         Assert.isTrue(tp >= 0, "请确保输入的TP数值为非负整数");
@@ -59,7 +58,6 @@ public class CharacService {
         }
     }
 
-    @Transactional
     public void setQP(List<Charac> characters, String inputQP) {
         int qp = Integer.parseInt(inputQP);
         Assert.isTrue(qp >= 0, "请确保输入的QP数值为非负整数");
@@ -68,7 +66,6 @@ public class CharacService {
         }
     }
 
-    @Transactional
     public void setPvpGrade(List<Charac> characters, String inputPvpGrade) {
         int pvpGrade = Integer.parseInt(inputPvpGrade);
         Assert.checkBetween(pvpGrade, PvpGrade.MIN_VALUE, PvpGrade.MAX_VALUE, "段位不在合法区间内");
@@ -77,7 +74,6 @@ public class CharacService {
         }
     }
 
-    @Transactional
     public void setPvpPoint(List<Charac> characters, String inputPvpPoint) {
         int pvpPoint = Integer.parseInt(inputPvpPoint);
         Assert.isTrue(pvpPoint >= 0, "请确保输入的胜点数值为非负整数");
@@ -86,7 +82,6 @@ public class CharacService {
         }
     }
 
-    @Transactional
     public void setPvpWin(List<Charac> characters, String inputPvpWin) {
         int win = Integer.parseInt(inputPvpWin);
         Assert.isTrue(win >= 0, "请确保输入的胜场数值为非负整数");
@@ -95,7 +90,6 @@ public class CharacService {
         }
     }
 
-    @Transactional
     public void setPvpLose(List<Charac> characters, String inputPvpLose) {
         int lose = Integer.parseInt(inputPvpLose);
         Assert.isTrue(lose >= 0, "请确保输入的败场数值为非负整数");
@@ -104,7 +98,6 @@ public class CharacService {
         }
     }
 
-    @Transactional
     public void setGrowType(List<Charac> characters, int growType) {
         Assert.isTrue((growType >= GrowType.MIN_JOB_VALUE && growType <= GrowType.MAX_JOB_VALUE) || (growType >= GrowType.MIN_AWAKE_VALUE && growType <= GrowType.MAX_AWAKE_VALUE), "主职业的数值不在合法区间内");
         for (Charac character : characters) {
@@ -121,7 +114,6 @@ public class CharacService {
         guildMemberMapper.setGrowType(characNo, growType);
     }
 
-    @Transactional
     public void setExpertJob(List<Charac> characters, int expertJob) {
         Assert.isTrue(expertJob >= ExpertJob.MIN_VALUE && expertJob <= ExpertJob.MAX_VALUE, "副职业的数值不在合法区间内");
         for (Charac character : characters) {
@@ -129,7 +121,6 @@ public class CharacService {
         }
     }
 
-    @Transactional
     public void setMaxExpertJobLevel(List<Charac> characters) {
         for (Charac character : characters) {
             Integer expertJob = characInfoMapper.findExpertJob(character.getNo());
@@ -139,14 +130,12 @@ public class CharacService {
         }
     }
 
-    @Transactional
     public void setMaxInvenWeight(List<Charac> characters) {
         for (Charac character : characters) {
             characInfoMapper.setMaxInvenWeight(character.getNo());
         }
     }
 
-    @Transactional
     public void clearInven(List<Charac> characters) {
         for (Charac character : characters) {
             inventoryMapper.clearInven(character.getNo());
@@ -154,28 +143,24 @@ public class CharacService {
 
     }
 
-    @Transactional
     public void clearCreatures(List<Charac> characters) {
         for (Charac character : characters) {
             creatureItemMapper.clearCreatures(character.getNo());
         }
     }
 
-    @Transactional
     public void clearAvatas(List<Charac> characters) {
         for (Charac character : characters) {
             userItemMapper.clearAvatas(character.getNo());
         }
     }
 
-    @Transactional
     public void clearQuests(List<Charac> characters) {
         for (Charac character : characters) {
             newCharacRequestMapper.clearQuests(character.getNo());
         }
     }
 
-    @Transactional
     public void clearAllQuests(List<Charac> characters) {
         String[] clearQuests = new String[]{
                 "0x30750000789CEDD8DB72C220100050F8FF9FEE8C6D080BA492943A193DE7C10B8605172460CA4FA5E797944B83EFAA8F174DBC14DFE6BACE16A92ACDE1696C8F72D09BABF24CEBE3FEE4D89F52D25F1AF21CCB5395B4AD17B9CBE9D9BE9DAA548D5A18AD4519FE69E3B7C6993297AB9CE2D05D4CEF41B5970FD6B8C1BEF4E0D7B7AAC1A566A77C1E5D7BA2EEB0E1C92934158FCA234356B37BDB762C8FD7479FDF4CD95D6CBB84951BA0D24879CA4DD172AF5861F7873B8E28B4FE6BA2F66BC51BFC209A33554EE5F4B22E8DF10096FB9DF5D226264EE26D855C8294437713B969A40B70D5A23021647F9EAE3EDBA671D78F7D7EEF27F95C1ED351CE8603D005CF718A0DEB9C3CC13E4FC376D54C8EAB716E4B463D879AF9F171AA656B41946602CD940EE7DB60FDDB3E296FEB45AFFE2F2C866EB73A717D1C7E9774F1D4D77CA370FBBA100EE04359386FA0B90FFF65388C2400EFCA3D0E000000000000000000000000000000000000002EF802C33903C7",
@@ -208,7 +193,6 @@ public class CharacService {
         }
     }
 
-    @Transactional
     public void setMaxEquipLevel(List<Charac> characters) {
         for (Charac character : characters) {
             int characNo = character.getNo();
@@ -219,14 +203,12 @@ public class CharacService {
         }
     }
 
-    @Transactional
     public void unlockSlots(List<Charac> characters) {
         for (Charac character : characters) {
             characStatMapper.unlockSlots(character.getNo());
         }
     }
 
-    @Transactional
     public void fillCloneAvatas(List<Charac> characters) {
         int[][] itemIds = new int[][]{
                 {42601, 42603, 42605, 42609, 42611, 42615, 42607, 42613, 601580003},
@@ -262,7 +244,6 @@ public class CharacService {
         }
     }
 
-    @Transactional
     public void addAvatas(List<Charac> characters, String commaSeperatedItemIds) {
         List<Integer> itemIds = ItemUtils.parseCommaSeperatedItemIds(commaSeperatedItemIds);
         for (Charac character : characters) {
@@ -278,7 +259,6 @@ public class CharacService {
         }
     }
 
-    @Transactional
     public void addCreatures(List<Charac> characters, String commaSeperatedItemIds, boolean isEgg) {
         List<Integer> itemIds = ItemUtils.parseCommaSeperatedItemIds(commaSeperatedItemIds);
         int creatureType = isEgg ? 0 : 1;

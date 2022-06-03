@@ -93,7 +93,6 @@ public class AccountService {
         Assert.equals(accountMapper.setPassword(accountName, newPassword), 1);
     }
 
-
     public void refreshCharacters(String accountName) {
         Assert.notEmpty(accountName, "账号名不能为空");
 
@@ -111,7 +110,6 @@ public class AccountService {
         accountPanelController.setCharacters(characters);
     }
 
-
     public void setCera(Integer uid, String inputCera) {
         int cera = Integer.parseInt(inputCera);
         Assert.notNull(uid, "请确保已经登录游戏或刷新角色");
@@ -126,14 +124,12 @@ public class AccountService {
         cashCeraPointMapper.update(uid, ceraPoint);
     }
 
-
     public void setAvataCoin(Integer uid, String inputAvataCoin) {
         int avataCoin = Integer.parseInt(inputAvataCoin);
         Assert.notNull(uid, "请确保已经登录游戏或刷新角色");
         Assert.isTrue(avataCoin >= 0, "请确保输入的时装代币数量为非负整数");
         memberAvatarCoinMapper.update(uid, avataCoin);
     }
-
 
     public void unlockAllDungeons(Integer uid) {
         Assert.notNull(uid, "请确保已经登录游戏或刷新角色");

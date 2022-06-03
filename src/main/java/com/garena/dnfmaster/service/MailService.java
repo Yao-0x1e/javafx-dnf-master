@@ -13,13 +13,13 @@ import org.springframework.transaction.annotation.Transactional;
 import java.util.List;
 
 @Service
+@Transactional
 public class MailService {
     @Autowired
     private PostalMapper postalMapper;
     @Autowired
     private LetterMapper letterMapper;
 
-    @Transactional
     public void sendMails(List<Charac> characters, String commaSeperatedItemIds, String inputItemQuantity, String inputGold, String inputUpgrade, String inputSeperateUpgrade, int amplifyOption, boolean sealOption, MailType mailType) {
         int gold = Integer.parseInt(inputGold);
         Assert.isTrue(gold >= 0, "金币数量必须为非负整数");
@@ -51,7 +51,6 @@ public class MailService {
         }
     }
 
-    @Transactional
     public void clearMails() {
         postalMapper.deleteAll();
         letterMapper.deleteAll();
