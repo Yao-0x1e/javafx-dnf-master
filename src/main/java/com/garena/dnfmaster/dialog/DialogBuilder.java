@@ -34,13 +34,17 @@ public class DialogBuilder {
         return new GenericDialog(owner, icon, "mfx-error-dialog", title, message);
     }
 
-    public static Alert buildYesOrNoDialog(Stage owner, String title, String headerText, String contentText) {
+    public static Alert buildConfirmationDialog(Stage owner, String title, String headerText, String contentText) {
         Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
         alert.setTitle(title);
         alert.setHeaderText(headerText);
         alert.setContentText(contentText);
         alert.initOwner(owner);
+        return alert;
+    }
 
+    public static Alert buildYesOrNoDialog(Stage owner, String title, String headerText, String contentText) {
+        Alert alert = buildConfirmationDialog(owner, title, headerText, contentText);
         alert.getButtonTypes().setAll(ButtonType.YES, ButtonType.NO, ButtonType.CANCEL);
         return alert;
     }

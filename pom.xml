@@ -10,9 +10,9 @@
     </parent>
     <groupId>com.garena</groupId>
     <artifactId>dnf-master</artifactId>
-    <version>0.0.1</version>
+    <version>0.0.2</version>
     <name>dnf-master</name>
-    <description>Demo project for Spring Boot</description>
+    <description>DNF Taiwan Database Management Tool based on JavaFX and Spring Boot</description>
     <properties>
         <java.version>11</java.version>
     </properties>

@@ -238,9 +238,10 @@ public class CharacService {
         }
 
         int abilityNo = 0;
+        String ipgAgencyNo = String.format("B11150101%010d", characNo);
         for (int slot = 0; slot < itemIds[job].length; ++slot) {
             int itemId = itemIds[job][slot];
-            userItemMapper.addAvata(characNo, slot, itemId, abilityNo);
+            userItemMapper.addAvata(characNo, slot, itemId, abilityNo, ipgAgencyNo);
         }
     }
 
@@ -252,10 +253,11 @@ public class CharacService {
     }
 
     private void addAvatas(int characNo, List<Integer> itemIds) {
+        String ipgAgencyNo = String.format("B11150101%010d", characNo);
         for (Integer itemId : itemIds) {
             Integer maxSlot = userItemMapper.findMaxAvatarSlot(characNo);
             int nextSlot = maxSlot == null ? 10 : maxSlot + 1;
-            userItemMapper.addAvata(characNo, nextSlot, itemId, 0);
+            userItemMapper.addAvata(characNo, nextSlot, itemId, 0, ipgAgencyNo);
         }
     }
 

@@ -67,6 +67,8 @@ public class ItemPanelController implements Initializable {
     private final CharacService characService;
 
     private Alert creatureTypeAlert;
+    private Alert avataMailAlternativeAlert;
+    private Alert creatureMailAlternativeAlert;
 
     public ItemPanelController() {
         mailService = AppContext.getBean(MailService.class);
@@ -139,13 +141,36 @@ public class ItemPanelController implements Initializable {
             comboBox.getItems().addAll(options);
             comboBox.getSelectionModel().selectItem(options[0]);
         });
+
+        mailTypeComboBox.setOnAction(event -> {
+            int selectedIndex = mailTypeComboBox.getSelectedIndex();
+            boolean disabled = selectedIndex != 0;
+            itemQuantityTextField.setText("1");
+            itemQuantityTextField.setDisable(disabled);
+            upgradeTextField.setDisable(disabled);
+            seperateUpgradeTextField.setDisable(disabled);
+            goldTextField.setDisable(disabled);
+            sealComboBox.setDisable(disabled);
+            amplifyComboBox.setDisable(disabled);
+        });
     }
 
     private void setupDialogs() {
         Stage primaryStage = AppContext.getBean(Stage.class);
         String creatureTypeQuestion = "你要添加的是否为宠物蛋？";
-        String creatureTypeWarning = "选择错误将导致物品被加入到错误的位置且无法使用！";
-        Platform.runLater(() -> creatureTypeAlert = DialogBuilder.buildYesOrNoDialog(primaryStage, "添加宠物", creatureTypeQuestion, creatureTypeWarning));
+        String creatureTypeWarning = "选择错误将导致物品无法正常使用！";
+
+        String avataMailAlternativeQuestion = "是否将装扮直接添加到角色的时装栏？";
+        String avataMailAlternativeWarning = "直接通过邮件发送的装扮无法被正常接收！";
+
+        String creatureMailAlternativeQuestion = "是否将宠物直接添加到角色的宠物栏？";
+        String creatureMailAlternativeWarning = "使用通过邮件发送的宠物会导致游戏崩溃！";
+
+        Platform.runLater(() -> {
+            creatureTypeAlert = DialogBuilder.buildYesOrNoDialog(primaryStage, "添加宠物", creatureTypeQuestion, creatureTypeWarning);
+            avataMailAlternativeAlert = DialogBuilder.buildConfirmationDialog(primaryStage, "发送装扮", avataMailAlternativeQuestion, avataMailAlternativeWarning);
+            creatureMailAlternativeAlert = DialogBuilder.buildConfirmationDialog(primaryStage, "发送宠物", creatureMailAlternativeQuestion, creatureMailAlternativeWarning);
+        });
     }
 
     private void updateItemIdTextField() {
@@ -182,19 +207,23 @@ public class ItemPanelController implements Initializable {
         String inputSeperateUpgrade = seperateUpgradeTextField.getText();
         int amplifyOption = amplifyComboBox.getSelectedIndex();
         boolean sealOption = sealComboBox.getSelectedIndex() != 0;
-        MailType mailType = null;
+
         int mailTypeSelectedIndex = mailTypeComboBox.getSelectedIndex();
         if (mailTypeSelectedIndex == 0) {
-            mailType = MailType.REGULAR;
+            mailService.sendMails(characters, commaSeperatedItemIds, inputItemQuantity, inputGold, inputUpgrade, inputSeperateUpgrade, amplifyOption, sealOption, MailType.REGULAR);
         } else if (mailTypeSelectedIndex == 1) {
-            mailType = MailType.AVATA;
+            Optional<ButtonType> optional = avataMailAlternativeAlert.showAndWait();
+            if (optional.isPresent() && ButtonType.OK == optional.get()) {
+                onAvataAddButtonClicked();
+            }
         } else if (mailTypeSelectedIndex == 2) {
-            mailType = MailType.CREATURE;
+            Optional<ButtonType> optional = creatureMailAlternativeAlert.showAndWait();
+            if (optional.isPresent() && ButtonType.OK == optional.get()) {
+                onCreatureAddButtonClicked();
+            }
         } else {
             assert false;
         }
-
-        mailService.sendMails(characters, commaSeperatedItemIds, inputItemQuantity, inputGold, inputUpgrade, inputSeperateUpgrade, amplifyOption, sealOption, mailType);
     }
 
     public synchronized void onAvataAddButtonClicked() {
