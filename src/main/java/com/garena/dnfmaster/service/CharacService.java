@@ -268,6 +268,7 @@ public class CharacService {
     }
 
     private void addCreatures(int characNo, List<Integer> itemIds, int creatureType) {
+        inventoryMapper.setCreatureFlag(characNo, 1);
         for (Integer itemId : itemIds) {
             Integer maxSlot = creatureItemMapper.findMaxCreatureSlot(characNo);
             int nextSlot = maxSlot == null ? 0 : maxSlot + 1;
