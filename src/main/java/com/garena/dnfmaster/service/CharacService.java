@@ -124,7 +124,7 @@ public class CharacService {
     public void setMaxExpertJobLevel(List<Charac> characters) {
         for (Charac character : characters) {
             Integer expertJob = characInfoMapper.findExpertJob(character.getNo());
-            if (expertJob == null || expertJob == 0) {
+            if (expertJob != null && expertJob != 0) {
                 characStatMapper.setMaxExpertJobLevel(character.getNo());
             }
         }
