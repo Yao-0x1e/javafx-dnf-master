@@ -145,8 +145,8 @@ public class ItemPanelController implements Initializable {
         mailTypeComboBox.setOnAction(event -> {
             int selectedIndex = mailTypeComboBox.getSelectedIndex();
             boolean disabled = selectedIndex != 0;
-            itemQuantityTextField.setText("1");
-            itemQuantityTextField.setDisable(disabled);
+            // itemQuantityTextField.setText("1");
+            // itemQuantityTextField.setDisable(disabled);
             upgradeTextField.setDisable(disabled);
             seperateUpgradeTextField.setDisable(disabled);
             goldTextField.setDisable(disabled);
@@ -168,8 +168,8 @@ public class ItemPanelController implements Initializable {
 
         Platform.runLater(() -> {
             creatureTypeAlert = DialogBuilder.buildYesOrNoDialog(primaryStage, "添加宠物", creatureTypeQuestion, creatureTypeWarning);
-            avataMailAlternativeAlert = DialogBuilder.buildConfirmationDialog(primaryStage, "发送装扮", avataMailAlternativeQuestion, avataMailAlternativeWarning);
-            creatureMailAlternativeAlert = DialogBuilder.buildConfirmationDialog(primaryStage, "发送宠物", creatureMailAlternativeQuestion, creatureMailAlternativeWarning);
+            avataMailAlternativeAlert = DialogBuilder.buildYesOrNoDialog(primaryStage, "发送装扮", avataMailAlternativeQuestion, avataMailAlternativeWarning);
+            creatureMailAlternativeAlert = DialogBuilder.buildYesOrNoDialog(primaryStage, "发送宠物", creatureMailAlternativeQuestion, creatureMailAlternativeWarning);
         });
     }
 
@@ -212,15 +212,21 @@ public class ItemPanelController implements Initializable {
         if (mailTypeSelectedIndex == 0) {
             mailService.sendMails(characters, commaSeperatedItemIds, inputItemQuantity, inputGold, inputUpgrade, inputSeperateUpgrade, amplifyOption, sealOption, MailType.REGULAR);
         } else if (mailTypeSelectedIndex == 1) {
-            Optional<ButtonType> optional = avataMailAlternativeAlert.showAndWait();
-            if (optional.isPresent() && ButtonType.OK == optional.get()) {
-                onAvataAddButtonClicked();
-            }
+            avataMailAlternativeAlert.showAndWait().ifPresent(buttonType -> {
+                if (ButtonType.YES == buttonType) {
+                    onAvataAddButtonClicked();
+                } else if (ButtonType.NO == buttonType) {
+                    mailService.sendMails(characters, commaSeperatedItemIds, inputItemQuantity, inputGold, inputUpgrade, inputSeperateUpgrade, amplifyOption, sealOption, MailType.AVATA);
+                }
+            });
         } else if (mailTypeSelectedIndex == 2) {
-            Optional<ButtonType> optional = creatureMailAlternativeAlert.showAndWait();
-            if (optional.isPresent() && ButtonType.OK == optional.get()) {
-                onCreatureAddButtonClicked();
-            }
+            creatureMailAlternativeAlert.showAndWait().ifPresent(buttonType -> {
+                if (ButtonType.YES == buttonType) {
+                    onCreatureAddButtonClicked();
+                } else if (ButtonType.NO == buttonType) {
+                    mailService.sendMails(characters, commaSeperatedItemIds, inputItemQuantity, inputGold, inputUpgrade, inputSeperateUpgrade, amplifyOption, sealOption, MailType.CREATURE);
+                }
+            });
         } else {
             assert false;
         }
