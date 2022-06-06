@@ -1,1 +1,1 @@
-java -ea --module-path "javafx-sdk-18.0.1/lib" --add-modules javafx.controls,javafx.fxml -jar .\dnf-master-0.0.2.jar
+java -ea --module-path "javafx-sdk-18.0.1/lib" --add-modules javafx.controls,javafx.fxml -jar ./dnf-master.jar

@@ -10,7 +10,7 @@
     </parent>
     <groupId>com.garena</groupId>
     <artifactId>dnf-master</artifactId>
-    <version>0.0.2</version>
+    <version>0.0.3</version>
     <name>dnf-master</name>
     <description>DNF Taiwan Database Management Tool based on JavaFX and Spring Boot</description>
     <properties>
@@ -132,6 +132,7 @@
     </dependencies>
 
     <build>
+        <finalName>dnf-master</finalName>
         <plugins>
             <plugin>
                 <groupId>org.springframework.boot</groupId>
